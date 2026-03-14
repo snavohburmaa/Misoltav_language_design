@@ -1,0 +1,1099 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Misoltav — The Beginner Smart Contract Language</title>
+  <meta name="description" content="Misoltav is a beginner-friendly smart contract language. Readable, safe, and minimal by design." />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500;600&family=Outfit:wght@300;400;600;700;800;900&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+
+  <!-- ──────────────── NAV ──────────────── -->
+  <nav id="nav" role="navigation" aria-label="Main navigation">
+    <div class="nav-inner">
+      <a href="#hero" class="logo" aria-label="Misoltav home">
+        <span class="logo-icon">⬡</span>
+        <span class="logo-text">Misoltav</span>
+      </a>
+      <ul class="nav-links">
+        <li><a href="#features"  id="nav-features">Features</a></li>
+        <li><a href="#paradigm"  id="nav-paradigm">Paradigm</a></li>
+        <li><a href="#bnf"       id="nav-bnf">BNF</a></li>
+        <li><a href="#ebnf"      id="nav-ebnf">EBNF</a></li>
+        <li><a href="#reference" id="nav-ref">Reference</a></li>
+        <li><a href="#syntax"    id="nav-syntax">Syntax</a></li>
+        <li><a href="#examples"  id="nav-examples">Examples</a></li>
+        <li><a href="#architecture" id="nav-arch">Architecture</a></li>
+        <li><a href="#usecases"  id="nav-use">Use Cases</a></li>
+        <li><a href="#roadmap"   id="nav-road">Roadmap</a></li>
+      </ul>
+      <button class="nav-cta" id="nav-cta-btn" aria-haspopup="dialog">Try it →</button>
+      <button class="hamburger" id="hamburger" aria-label="Toggle menu" aria-expanded="false">
+        <span></span><span></span><span></span>
+      </button>
+    </div>
+  </nav>
+
+  <!-- ──────────────── HERO ──────────────── -->
+  <section id="hero" aria-label="Hero section">
+    <canvas id="hero-canvas" aria-hidden="true"></canvas>
+    <div class="hero-content">
+      <div class="hero-badge">
+        <span class="badge-dot"></span>
+        Smart Contract Language · v2.0
+      </div>
+      <h1 class="hero-title">
+        Write Contracts<br/>
+        <span class="gradient-text">Like Plain English</span>
+      </h1>
+      <p class="hero-subtitle">
+        Misoltav is an indentation-first, type-optional smart contract language.<br/>
+        No braces. No boilerplate. Built-in safety. If you can read it, you can write it.
+      </p>
+      <div class="hero-actions">
+        <a href="#features"  class="btn-primary"   id="hero-explore-btn">Explore Language</a>
+        <a href="#examples"  class="btn-secondary"  id="hero-example-btn">See Examples</a>
+      </div>
+    </div>
+    <div class="hero-scroll-hint" aria-hidden="true">
+      <div class="scroll-mouse"><div class="scroll-wheel"></div></div>
+      <span>Scroll to explore</span>
+    </div>
+  </section>
+
+  <!-- ──────────────── PHILOSOPHY ──────────────── -->
+  <section id="philosophy" aria-label="Language philosophy">
+    <div class="container">
+      <div class="section-badge">Philosophy</div>
+      <h2 class="section-title">Three Core Principles</h2>
+      <p class="section-sub">Everything in Misoltav flows from three beliefs about what a smart contract language should be.</p>
+      <div class="pillars-grid">
+        <div class="pillar-card" id="pillar-1">
+          <div class="pillar-icon-wrap" style="--c:#38bdf8" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M2 12s4-6 10-6 10 6 10 6-4 6-10 6S2 12 2 12z"/><circle cx="12" cy="12" r="3"/></svg></div>
+          <h3>Readable by Anyone</h3>
+          <p>A non-programmer should understand the intent of a contract at a glance. Code that reads like prose is code that's auditable.</p>
+        </div>
+        <div class="pillar-card" id="pillar-2">
+          <div class="pillar-icon-wrap" style="--c:#4ade80" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg></div>
+          <h3>Safe by Default</h3>
+          <p>Overflow protection, reentrancy guards, and access control are keywords — not libraries. Security is the starting point, not an afterthought.</p>
+        </div>
+        <div class="pillar-card" id="pillar-3">
+          <div class="pillar-icon-wrap" style="--c:#fbbf24" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M13 2L3 14h8l-1 8 10-12h-8l1-8z"/></svg></div>
+          <h3>Less Boilerplate</h3>
+          <p>No semicolons. No braces. No type annotations required for basic contracts. Express intent, not syntax ceremony.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ──────────────── FEATURES ──────────────── -->
+  <section id="features" aria-label="Key features">
+    <div class="container">
+      <div class="section-badge">Features</div>
+      <h2 class="section-title">What Makes Misoltav Different</h2>
+      <p class="section-sub">Every feature was chosen to remove friction, not add it.</p>
+      <div class="features-grid">
+
+        <div class="feature-card" id="feat-indent">
+          <div class="feat-icon-wrap" style="--c:#7c3aed">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="3 8 9 8"/><polyline points="3 12 15 12"/><polyline points="3 16 21 16"/></svg>
+          </div>
+          <h3>Indentation Blocks</h3>
+          <p>Python-style indentation. No curly braces. Block structure is visual and immediate.</p>
+          <div class="feat-code"><code><span class="kw">function</span> transfer(to, amount):<br/>    <span class="kw">require</span> balance[sender] &gt;= amount<br/>    balance[sender] -= amount</code></div>
+        </div>
+
+        <div class="feature-card" id="feat-only">
+          <div class="feat-icon-wrap" style="--c:#059669">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
+          </div>
+          <h3>One-Word Access Control</h3>
+          <p>Replace entire modifier patterns with a single readable keyword at the top of a function.</p>
+          <div class="feat-code"><code><span class="kw">function</span> mint(user, amount):<br/>    <span class="kw">only</span> owner<br/>    balance[user] += amount</code></div>
+        </div>
+
+        <div class="feature-card" id="feat-lock">
+          <div class="feat-icon-wrap" style="--c:#dc2626">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="4.93" y1="4.93" x2="19.07" y2="19.07"/></svg>
+          </div>
+          <h3>Reentrancy in One Word</h3>
+          <p>No ReentrancyGuard import. No bool variable. Just <code>lock</code> — the compiler handles the rest.</p>
+          <div class="feat-code"><code><span class="kw">function</span> withdraw(amount):<br/>    <span class="kw">lock</span><br/>    balance[sender] -= amount<br/>    <span class="kw">send</span>(sender, amount)</code></div>
+        </div>
+
+        <div class="feature-card" id="feat-maps">
+          <div class="feat-icon-wrap" style="--c:#0891b2">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="3" width="20" height="14" rx="2"/><path d="M8 21h8M12 17v4"/></svg>
+          </div>
+          <h3>Mapping by Subscript</h3>
+          <p>Declare state mappings in one line using subscript notation — no lengthy <code>mapping()</code> syntax.</p>
+          <div class="feat-code"><code>balance[address]<br/>allowance[address][address]</code></div>
+        </div>
+
+        <div class="feature-card" id="feat-sender">
+          <div class="feat-icon-wrap" style="--c:#d97706">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+          </div>
+          <h3>Human Context Variables</h3>
+          <p><code>sender</code>, <code>value</code>, <code>now</code>, <code>self</code> replace cryptic <code>msg.sender</code>, <code>block.timestamp</code> references.</p>
+          <div class="feat-code"><code>owner = sender<br/>deadline = now + <span class="num">7</span> days<br/>send(sender, value)</code></div>
+        </div>
+
+        <div class="feature-card" id="feat-match">
+          <div class="feat-icon-wrap" style="--c:#7c3aed">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="16 18 22 12 16 6"/><polyline points="8 6 2 12 8 18"/></svg>
+          </div>
+          <h3>Pattern Matching</h3>
+          <p>Exhaustive <code>match</code> statements replace chains of if/else over enum values.</p>
+          <div class="feat-code"><code><span class="kw">match</span> status:<br/>    Active:<br/>        &hellip;<br/>    Paused:<br/>        &hellip;</code></div>
+        </div>
+
+        <div class="feature-card" id="feat-safe">
+          <div class="feat-icon-wrap" style="--c:#059669">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+          </div>
+          <h3>Safe Arithmetic Always</h3>
+          <p>Integer overflow and underflow automatically revert the transaction. No SafeMath import needed.</p>
+          <div class="feat-code"><code><span class="cm">-- safe by default:</span><br/>balance[sender] -= amount<br/><span class="cm">-- reverts if underflow</span></code></div>
+        </div>
+
+        <div class="feature-card" id="feat-units">
+          <div class="feat-icon-wrap" style="--c:#0891b2">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg>
+          </div>
+          <h3>Native Unit Literals</h3>
+          <p>Ether and time units are first-class citizens of the language, no manual conversion.</p>
+          <div class="feat-code"><code>goal = <span class="num">10</span> ether<br/>deadline = now + <span class="num">30</span> days<br/>fee = <span class="num">50</span> gwei</code></div>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- ──────────────── LANGUAGE PARADIGM ──────────────── -->
+  <section id="paradigm" aria-label="Language paradigm">
+    <div class="container">
+      <div class="section-badge">Language Paradigm</div>
+      <h2 class="section-title">How Misoltav Thinks</h2>
+      <p class="section-sub">Misoltav is designed around four interlocking paradigm pillars that collectively define its character as a language.</p>
+
+      <div class="paradigm-grid">
+
+        <div class="paradigm-card" id="para-1">
+          <div class="paradigm-num">01</div>
+          <h3>Imperative &amp; Procedural</h3>
+          <p>Contracts are written as sequential instructions. Functions describe <em>what to do, step by step</em> — read a balance, check a condition, update state, emit an event. There are no hidden side-effects outside of what is written.</p>
+          <div class="paradigm-tag-row">
+            <span class="ptag">step-by-step</span>
+            <span class="ptag">explicit flow</span>
+            <span class="ptag">no magic</span>
+          </div>
+        </div>
+
+        <div class="paradigm-card" id="para-2">
+          <div class="paradigm-num">02</div>
+          <h3>Contract-Oriented</h3>
+          <p>The <code>contract</code> is the top-level unit of organization — equivalent to a class in OOP languages but living permanently on-chain. State belongs to a contract; functions are the only interface to that state.</p>
+          <div class="paradigm-tag-row">
+            <span class="ptag">contract as class</span>
+            <span class="ptag">on-chain objects</span>
+            <span class="ptag">encapsulation</span>
+          </div>
+        </div>
+
+        <div class="paradigm-card" id="para-3">
+          <div class="paradigm-num">03</div>
+          <h3>Declarative Safety</h3>
+          <p>Safety constraints are <em>declared</em> as keywords at the top of a function body — <code>only</code>, <code>lock</code>, <code>payable</code> — rather than implemented by hand. The compiler enforces them. You state intent; the compiler does the work.</p>
+          <div class="paradigm-tag-row">
+            <span class="ptag">guard keywords</span>
+            <span class="ptag">compiler-enforced</span>
+            <span class="ptag">intent-first</span>
+          </div>
+        </div>
+
+        <div class="paradigm-card" id="para-4">
+          <div class="paradigm-num">04</div>
+          <h3>Indentation-Scoped</h3>
+          <p>Like Python, block structure is communicated visually through indentation — not with braces. An indent after a colon opens a block; returning to the previous indent level closes it. Consistent indentation is enforced by the compiler.</p>
+          <div class="paradigm-tag-row">
+            <span class="ptag">whitespace-sensitive</span>
+            <span class="ptag">no braces</span>
+            <span class="ptag">visual blocks</span>
+          </div>
+        </div>
+
+        <div class="paradigm-card" id="para-5">
+          <div class="paradigm-num">05</div>
+          <h3>Type-Inferred</h3>
+          <p>Misoltav infers types from context. You never write <code>uint256</code> or <code>address</code> when declaring simple variables. The compiler figures out the type based on assignment — but still catches type mismatches at compile time.</p>
+          <div class="paradigm-tag-row">
+            <span class="ptag">type inference</span>
+            <span class="ptag">static safety</span>
+            <span class="ptag">no annotations</span>
+          </div>
+        </div>
+
+        <div class="paradigm-card" id="para-6">
+          <div class="paradigm-num">06</div>
+          <h3>Event-Driven Logging</h3>
+          <p>State changes are made observable through first-class <code>event</code> declarations and <code>emit</code> statements. Events are the contract's audit trail — and are automatically indexed for efficient off-chain querying.</p>
+          <div class="paradigm-tag-row">
+            <span class="ptag">event declarations</span>
+            <span class="ptag">auto-indexed</span>
+            <span class="ptag">audit trail</span>
+          </div>
+        </div>
+
+      </div>
+
+      <!-- Paradigm comparison strip -->
+      <div class="paradigm-vs" id="paradigm-vs">
+        <div class="pvs-col">
+          <h4>What Misoltav <span class="text-green">borrows</span> from other languages</h4>
+          <div class="pvs-row"><span class="pvs-lang">Python</span><span>Indentation-based block scoping</span></div>
+          <div class="pvs-row"><span class="pvs-lang">Rust</span><span>Safety-first, compiler-enforced constraints</span></div>
+          <div class="pvs-row"><span class="pvs-lang">Go</span><span>Minimal syntax, keyword-driven semantics</span></div>
+          <div class="pvs-row"><span class="pvs-lang">Solidity</span><span>Contract model, EVM target, event system</span></div>
+          <div class="pvs-row"><span class="pvs-lang">ML / F#</span><span>Pattern matching with exhaustiveness checks</span></div>
+        </div>
+        <div class="pvs-divider" aria-hidden="true"></div>
+        <div class="pvs-col">
+          <h4>What Misoltav <span class="text-purple">innovates</span></h4>
+          <div class="pvs-row"><span class="pvs-innov">only</span><span>One-word role-based access control guard</span></div>
+          <div class="pvs-row"><span class="pvs-innov">lock</span><span>Single-keyword reentrancy mutex injection</span></div>
+          <div class="pvs-row"><span class="pvs-innov">balance[address]</span><span>Subscript-syntax mapping declaration</span></div>
+          <div class="pvs-row"><span class="pvs-innov">sender / value / now</span><span>Human-readable blockchain context variables</span></div>
+          <div class="pvs-row"><span class="pvs-innov">Overflow-safe default</span><span>All arithmetic is safe — no library needed</span></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ──────────────── BNF GRAMMAR ──────────────── -->
+  <section id="bnf" aria-label="BNF Grammar">
+    <div class="container">
+      <div class="section-badge">Formal Grammar</div>
+      <h2 class="section-title">BNF Grammar</h2>
+      <p class="section-sub">Backus-Naur Form — defines every valid construct in Misoltav. Terminal symbols are in quotes; non-terminals in &lt;angle-brackets&gt;.</p>
+
+      <div class="grammar-layout">
+        <div class="grammar-nav" id="bnf-nav" role="tablist" aria-label="BNF sections">
+          <button class="gnav-btn active" data-target="bnf-prog"    id="gnav-prog">Program</button>
+          <button class="gnav-btn" data-target="bnf-contract"       id="gnav-contract">Contract</button>
+          <button class="gnav-btn" data-target="bnf-fn"             id="gnav-fn">Functions</button>
+          <button class="gnav-btn" data-target="bnf-stmts"          id="gnav-stmts">Statements</button>
+          <button class="gnav-btn" data-target="bnf-exprs"          id="gnav-exprs">Expressions</button>
+          <button class="gnav-btn" data-target="bnf-terminals"      id="gnav-terminals">Terminals</button>
+        </div>
+        <div class="grammar-pane-wrap">
+          <div class="grammar-pane active" id="bnf-prog">
+            <div class="code-window">
+              <div class="code-window-bar"><span class="dot red"></span><span class="dot yellow"></span><span class="dot green"></span><span class="code-window-title">program.bnf</span></div>
+              <pre class="grammar-code"><code id="bnf-prog-code"></code></pre>
+            </div>
+          </div>
+          <div class="grammar-pane" id="bnf-contract">
+            <div class="code-window">
+              <div class="code-window-bar"><span class="dot red"></span><span class="dot yellow"></span><span class="dot green"></span><span class="code-window-title">contract.bnf</span></div>
+              <pre class="grammar-code"><code id="bnf-contract-code"></code></pre>
+            </div>
+          </div>
+          <div class="grammar-pane" id="bnf-fn">
+            <div class="code-window">
+              <div class="code-window-bar"><span class="dot red"></span><span class="dot yellow"></span><span class="dot green"></span><span class="code-window-title">functions.bnf</span></div>
+              <pre class="grammar-code"><code id="bnf-fn-code"></code></pre>
+            </div>
+          </div>
+          <div class="grammar-pane" id="bnf-stmts">
+            <div class="code-window">
+              <div class="code-window-bar"><span class="dot red"></span><span class="dot yellow"></span><span class="dot green"></span><span class="code-window-title">statements.bnf</span></div>
+              <pre class="grammar-code"><code id="bnf-stmts-code"></code></pre>
+            </div>
+          </div>
+          <div class="grammar-pane" id="bnf-exprs">
+            <div class="code-window">
+              <div class="code-window-bar"><span class="dot red"></span><span class="dot yellow"></span><span class="dot green"></span><span class="code-window-title">expressions.bnf</span></div>
+              <pre class="grammar-code"><code id="bnf-exprs-code"></code></pre>
+            </div>
+          </div>
+          <div class="grammar-pane" id="bnf-terminals">
+            <div class="code-window">
+              <div class="code-window-bar"><span class="dot red"></span><span class="dot yellow"></span><span class="dot green"></span><span class="code-window-title">terminals.bnf</span></div>
+              <pre class="grammar-code"><code id="bnf-terminals-code"></code></pre>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ──────────────── EBNF GRAMMAR ──────────────── -->
+  <section id="ebnf" aria-label="EBNF Grammar">
+    <div class="container">
+      <div class="section-badge">Formal Grammar</div>
+      <h2 class="section-title">EBNF Grammar</h2>
+      <p class="section-sub">Extended Backus-Naur Form — adds repetition <code>{ }</code>, optional <code>[ ]</code>, grouping <code>( )</code>, and alternation <code>|</code> for a more concise specification.</p>
+
+      <div class="ebnf-legend">
+        <span class="ebnf-legend-item"><code>{ x }</code> zero or more</span>
+        <span class="ebnf-legend-item"><code>[ x ]</code> optional</span>
+        <span class="ebnf-legend-item"><code>( x )</code> grouping</span>
+        <span class="ebnf-legend-item"><code>x | y</code> alternation</span>
+        <span class="ebnf-legend-item"><code>x , y</code> sequence</span>
+        <span class="ebnf-legend-item"><code>;</code> rule end</span>
+      </div>
+
+      <div class="grammar-layout">
+        <div class="grammar-nav" id="ebnf-nav" role="tablist" aria-label="EBNF sections">
+          <button class="gnav-btn active" data-target="ebnf-prog"       id="egnav-prog">Program</button>
+          <button class="gnav-btn" data-target="ebnf-contract"          id="egnav-contract">Contract</button>
+          <button class="gnav-btn" data-target="ebnf-fn"                id="egnav-fn">Functions</button>
+          <button class="gnav-btn" data-target="ebnf-stmts"             id="egnav-stmts">Statements</button>
+          <button class="gnav-btn" data-target="ebnf-exprs"             id="egnav-exprs">Expressions</button>
+        </div>
+        <div class="grammar-pane-wrap">
+          <div class="grammar-pane active" id="ebnf-prog">
+            <div class="code-window">
+              <div class="code-window-bar"><span class="dot red"></span><span class="dot yellow"></span><span class="dot green"></span><span class="code-window-title">program.ebnf</span></div>
+              <pre class="grammar-code"><code id="ebnf-prog-code"></code></pre>
+            </div>
+          </div>
+          <div class="grammar-pane" id="ebnf-contract">
+            <div class="code-window">
+              <div class="code-window-bar"><span class="dot red"></span><span class="dot yellow"></span><span class="dot green"></span><span class="code-window-title">contract.ebnf</span></div>
+              <pre class="grammar-code"><code id="ebnf-contract-code"></code></pre>
+            </div>
+          </div>
+          <div class="grammar-pane" id="ebnf-fn">
+            <div class="code-window">
+              <div class="code-window-bar"><span class="dot red"></span><span class="dot yellow"></span><span class="dot green"></span><span class="code-window-title">functions.ebnf</span></div>
+              <pre class="grammar-code"><code id="ebnf-fn-code"></code></pre>
+            </div>
+          </div>
+          <div class="grammar-pane" id="ebnf-stmts">
+            <div class="code-window">
+              <div class="code-window-bar"><span class="dot red"></span><span class="dot yellow"></span><span class="dot green"></span><span class="code-window-title">statements.ebnf</span></div>
+              <pre class="grammar-code"><code id="ebnf-stmts-code"></code></pre>
+            </div>
+          </div>
+          <div class="grammar-pane" id="ebnf-exprs">
+            <div class="code-window">
+              <div class="code-window-bar"><span class="dot red"></span><span class="dot yellow"></span><span class="dot green"></span><span class="code-window-title">expressions.ebnf</span></div>
+              <pre class="grammar-code"><code id="ebnf-exprs-code"></code></pre>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ──────────────── LANGUAGE REFERENCE ──────────────── -->
+  <section id="reference" aria-label="Language Reference">
+    <div class="container">
+      <div class="section-badge">Language Reference</div>
+      <h2 class="section-title">Complete Reference</h2>
+      <p class="section-sub">Everything the language provides — keywords, guards, built-ins, operators, units, comments, and the compiler CLI.</p>
+
+      <!-- Reference Tab Bar -->
+      <div class="ref-tabs" id="ref-tabs" role="tablist" aria-label="Reference sections">
+        <button class="ref-tab active" data-ref="ref-keywords"    id="rtab-kw">Keywords</button>
+        <button class="ref-tab" data-ref="ref-guards"             id="rtab-guards">Guard Keywords</button>
+        <button class="ref-tab" data-ref="ref-context"            id="rtab-ctx">Context Vars</button>
+        <button class="ref-tab" data-ref="ref-builtins"           id="rtab-builtins">Built-ins</button>
+        <button class="ref-tab" data-ref="ref-operators"          id="rtab-ops">Operators</button>
+        <button class="ref-tab" data-ref="ref-units"              id="rtab-units">Unit Literals</button>
+        <button class="ref-tab" data-ref="ref-comments"           id="rtab-comments">Comments</button>
+        <button class="ref-tab" data-ref="ref-safety"             id="rtab-safety">Safety</button>
+        <button class="ref-tab" data-ref="ref-cli"                id="rtab-cli">CLI (misolc)</button>
+      </div>
+
+      <div class="ref-body">
+
+        <!-- KEYWORDS -->
+        <div class="ref-pane active" id="ref-keywords">
+          <h3 class="ref-pane-title">Reserved Keywords</h3>
+          <p class="ref-pane-sub">These identifiers are reserved by the language and cannot be used as variable or function names.</p>
+          <div class="ref-kw-cloud">
+            <span class="rkw cat-decl">contract</span>
+            <span class="rkw cat-decl">interface</span>
+            <span class="rkw cat-decl">struct</span>
+            <span class="rkw cat-decl">enum</span>
+            <span class="rkw cat-decl">function</span>
+            <span class="rkw cat-decl">import</span>
+            <span class="rkw cat-decl">from</span>
+            <span class="rkw cat-decl">event</span>
+            <span class="rkw cat-flow">return</span>
+            <span class="rkw cat-flow">if</span>
+            <span class="rkw cat-flow">elif</span>
+            <span class="rkw cat-flow">else</span>
+            <span class="rkw cat-flow">match</span>
+            <span class="rkw cat-flow">for</span>
+            <span class="rkw cat-flow">in</span>
+            <span class="rkw cat-flow">while</span>
+            <span class="rkw cat-safe">only</span>
+            <span class="rkw cat-safe">lock</span>
+            <span class="rkw cat-safe">payable</span>
+            <span class="rkw cat-safe">require</span>
+            <span class="rkw cat-safe">revert</span>
+            <span class="rkw cat-safe">emit</span>
+            <span class="rkw cat-safe">send</span>
+            <span class="rkw cat-logic">and</span>
+            <span class="rkw cat-logic">or</span>
+            <span class="rkw cat-logic">not</span>
+            <span class="rkw cat-val">true</span>
+            <span class="rkw cat-val">false</span>
+            <span class="rkw cat-val">self</span>
+          </div>
+          <div class="ref-legend">
+            <span class="rkw cat-decl">decl</span> Declaration
+            <span class="rkw cat-flow">flow</span> Control flow
+            <span class="rkw cat-safe">safe</span> Safety &amp; effects
+            <span class="rkw cat-logic">logic</span> Logic
+            <span class="rkw cat-val">val</span> Values
+          </div>
+        </div>
+
+        <!-- GUARD KEYWORDS -->
+        <div class="ref-pane" id="ref-guards">
+          <h3 class="ref-pane-title">Guard Keywords</h3>
+          <p class="ref-pane-sub">Placed at the start of a function body. Enforced by the compiler — no manual implementation needed.</p>
+          <div class="ref-table-wrap">
+            <table class="ref-table">
+              <thead><tr><th>Keyword</th><th>What it does</th><th>Reverts when</th></tr></thead>
+              <tbody>
+                <tr>
+                  <td><code>only &lt;expr&gt;</code></td>
+                  <td>Access control guard. Restricts the caller to a specific address.</td>
+                  <td><code>sender != expr</code></td>
+                </tr>
+                <tr>
+                  <td><code>lock</code></td>
+                  <td>Reentrancy mutex. Prevents reentrant calls by setting and clearing a boolean flag around the function body.</td>
+                  <td>If the function is called while already executing</td>
+                </tr>
+                <tr>
+                  <td><code>payable</code></td>
+                  <td>Marks the function as ETH-accepting. Without this, any call that sends ETH is auto-rejected.</td>
+                  <td>Not present when ETH is sent to a non-payable call</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+          <div class="ref-code-example">
+            <div class="code-window">
+              <div class="code-window-bar"><span class="dot red"></span><span class="dot yellow"></span><span class="dot green"></span><span class="code-window-title">guards.miso</span></div>
+              <pre><code id="ref-guards-code"></code></pre>
+            </div>
+          </div>
+        </div>
+
+        <!-- CONTEXT VARIABLES -->
+        <div class="ref-pane" id="ref-context">
+          <h3 class="ref-pane-title">Context Variables</h3>
+          <p class="ref-pane-sub">Always in scope inside any function body. Read-only — cannot be assigned.</p>
+          <div class="ref-table-wrap">
+            <table class="ref-table">
+              <thead><tr><th>Variable</th><th>Type</th><th>Value</th><th>Solidity equiv.</th></tr></thead>
+              <tbody>
+                <tr><td><code>sender</code></td><td>address</td><td>Address that called this function</td><td><code>msg.sender</code></td></tr>
+                <tr><td><code>value</code></td><td>uint</td><td>Amount of ETH sent with this call (wei)</td><td><code>msg.value</code></td></tr>
+                <tr><td><code>now</code></td><td>uint</td><td>Current block timestamp (Unix seconds)</td><td><code>block.timestamp</code></td></tr>
+                <tr><td><code>block</code></td><td>uint</td><td>Current block number</td><td><code>block.number</code></td></tr>
+                <tr><td><code>self</code></td><td>address</td><td>This contract's own address</td><td><code>address(this)</code></td></tr>
+                <tr><td><code>chain</code></td><td>uint</td><td>Network chain ID</td><td><code>block.chainid</code></td></tr>
+                <tr><td><code>gas</code></td><td>uint</td><td>Remaining gas at time of call</td><td><code>gasleft()</code></td></tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+        <!-- BUILT-IN FUNCTIONS -->
+        <div class="ref-pane" id="ref-builtins">
+          <h3 class="ref-pane-title">Built-in Functions</h3>
+          <p class="ref-pane-sub">Available everywhere. No import needed.</p>
+          <div class="ref-table-wrap">
+            <table class="ref-table">
+              <thead><tr><th>Function</th><th>Returns</th><th>Description</th></tr></thead>
+              <tbody>
+                <tr><td><code>send(to, amount)</code></td><td>—</td><td>Transfer <code>amount</code> wei to address <code>to</code>. Reverts on failure. Reentrancy-safe when combined with <code>lock</code>.</td></tr>
+                <tr><td><code>hash(data)</code></td><td>bytes32</td><td>Compute the keccak256 hash of <code>data</code>.</td></tr>
+                <tr><td><code>assert(cond)</code></td><td>—</td><td>Assert an invariant. Panics (consumes all gas) on failure. Use for internal logic errors.</td></tr>
+                <tr><td><code>require(cond)</code></td><td>—</td><td>Require a condition. Reverts cleanly with an optional message if false.</td></tr>
+                <tr><td><code>require(cond, msg)</code></td><td>—</td><td>Same as above but includes a human-readable revert message string.</td></tr>
+                <tr><td><code>revert(msg)</code></td><td>—</td><td>Unconditionally revert with a message string.</td></tr>
+                <tr><td><code>emit Event(...)</code></td><td>—</td><td>Emit a declared event with named arguments.</td></tr>
+                <tr><td><code>len(arr)</code></td><td>uint</td><td>Return the length of an array or the size of a mapping.</td></tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+        <!-- OPERATORS -->
+        <div class="ref-pane" id="ref-operators">
+          <h3 class="ref-pane-title">Operator Precedence</h3>
+          <p class="ref-pane-sub">Operators listed from <strong>highest</strong> (evaluated first) to <strong>lowest</strong> precedence.</p>
+          <div class="ref-table-wrap">
+            <table class="ref-table">
+              <thead><tr><th>Level</th><th>Operators</th><th>Associativity</th><th>Example</th></tr></thead>
+              <tbody>
+                <tr><td><span class="prec-badge">6</span> Unary</td><td><code>-</code></td><td>Right</td><td><code>-amount</code></td></tr>
+                <tr><td><span class="prec-badge">5</span> Multiplicative</td><td><code>*</code> &nbsp;<code>/</code> &nbsp;<code>%</code></td><td>Left</td><td><code>a * b / c</code></td></tr>
+                <tr><td><span class="prec-badge">4</span> Additive</td><td><code>+</code> &nbsp;<code>-</code></td><td>Left</td><td><code>a + b - c</code></td></tr>
+                <tr><td><span class="prec-badge">3</span> Comparison</td><td><code>==</code> &nbsp;<code>!=</code> &nbsp;<code>&lt;</code> &nbsp;<code>&gt;</code> &nbsp;<code>&lt;=</code> &nbsp;<code>&gt;=</code></td><td>Left</td><td><code>a &gt;= b</code></td></tr>
+                <tr><td><span class="prec-badge">2</span> Logical NOT</td><td><code>not</code></td><td>Right</td><td><code>not active</code></td></tr>
+                <tr><td><span class="prec-badge">1</span> Logical AND</td><td><code>and</code></td><td>Left</td><td><code>a and b</code></td></tr>
+                <tr><td><span class="prec-badge">0</span> Logical OR</td><td><code>or</code></td><td>Left</td><td><code>a or b</code></td></tr>
+              </tbody>
+            </table>
+          </div>
+          <div class="ref-note">⚠️ All arithmetic is <strong>overflow-safe by default</strong>. Integer overflow or underflow reverts the transaction automatically — no library needed.</div>
+        </div>
+
+        <!-- UNIT LITERALS -->
+        <div class="ref-pane" id="ref-units">
+          <h3 class="ref-pane-title">Unit Literals</h3>
+          <p class="ref-pane-sub">ETH denominations and time durations are first-class syntax. The compiler converts them to their base unit values at compile time.</p>
+          <div class="ref-units-grid">
+            <div class="ref-units-col">
+              <h4>ETH Denominations</h4>
+              <div class="ref-table-wrap">
+                <table class="ref-table">
+                  <thead><tr><th>Literal</th><th>Value in wei</th></tr></thead>
+                  <tbody>
+                    <tr><td><code>1 wei</code></td><td>1</td></tr>
+                    <tr><td><code>1 gwei</code></td><td>1 000 000 000</td></tr>
+                    <tr><td><code>1 ether</code></td><td>1 000 000 000 000 000 000</td></tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+            <div class="ref-units-col">
+              <h4>Time Durations</h4>
+              <div class="ref-table-wrap">
+                <table class="ref-table">
+                  <thead><tr><th>Literal</th><th>Value in seconds</th></tr></thead>
+                  <tbody>
+                    <tr><td><code>1 seconds</code></td><td>1</td></tr>
+                    <tr><td><code>1 minutes</code></td><td>60</td></tr>
+                    <tr><td><code>1 hours</code></td><td>3 600</td></tr>
+                    <tr><td><code>1 days</code></td><td>86 400</td></tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+          <div class="ref-code-example">
+            <div class="code-window">
+              <div class="code-window-bar"><span class="dot red"></span><span class="dot yellow"></span><span class="dot green"></span><span class="code-window-title">units.miso</span></div>
+              <pre><code id="ref-units-code"></code></pre>
+            </div>
+          </div>
+        </div>
+
+        <!-- COMMENTS -->
+        <div class="ref-pane" id="ref-comments">
+          <h3 class="ref-pane-title">Comment Syntax</h3>
+          <p class="ref-pane-sub">Misoltav uses <code>--</code> instead of <code>//</code>, keeping comments visually distinct.</p>
+          <div class="ref-table-wrap">
+            <table class="ref-table">
+              <thead><tr><th>Syntax</th><th>Type</th><th>Notes</th></tr></thead>
+              <tbody>
+                <tr><td><code>-- text</code></td><td>Single-line</td><td>Everything from <code>--</code> to end of line is ignored</td></tr>
+                <tr><td><code>--[ ... ]--</code></td><td>Multi-line</td><td>Spans multiple lines; can be nested</td></tr>
+                <tr><td><code>--- text</code></td><td>Doc comment</td><td>Triple-dash; included in auto-generated HTML docs by <code>misolc docs</code></td></tr>
+              </tbody>
+            </table>
+          </div>
+          <div class="ref-code-example">
+            <div class="code-window">
+              <div class="code-window-bar"><span class="dot red"></span><span class="dot yellow"></span><span class="dot green"></span><span class="code-window-title">comments.miso</span></div>
+              <pre><code id="ref-comments-code"></code></pre>
+            </div>
+          </div>
+        </div>
+
+        <!-- SAFETY MECHANISMS -->
+        <div class="ref-pane" id="ref-safety">
+          <h3 class="ref-pane-title">Built-in Safety Mechanisms</h3>
+          <p class="ref-pane-sub">Misoltav makes security the default — not an opt-in library.</p>
+          <div class="ref-safety-grid">
+            <div class="ref-safety-card">
+              <div class="rsafe-icon-wrap" style="--c:#fb923c" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"><rect x="4" y="4" width="6" height="6" rx="1"/><rect x="14" y="4" width="6" height="6" rx="1"/><rect x="4" y="14" width="6" height="6" rx="1"/><rect x="14" y="14" width="6" height="6" rx="1"/><path d="M7 10v4M17 10v4" stroke-linecap="round"/></svg></div>
+              <h4>Overflow / Underflow Protection</h4>
+              <p>All arithmetic is automatically checked. Any integer overflow or underflow reverts the transaction. No <code>SafeMath</code> or <code>unchecked</code> needed.</p>
+              <div class="code-window"><div class="code-window-bar"><span class="dot red"></span><span class="dot yellow"></span><span class="dot green"></span></div><pre><code id="ref-safe-overflow-code"></code></pre></div>
+            </div>
+            <div class="ref-safety-card">
+              <div class="rsafe-icon-wrap" style="--c:#eab308" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 2l-2 2m-7.61 7.61a5.5 5.5 0 1 1-7.778 7.777 5.5 5.5 0 0 1 7.777-7.777zm0 0L15.5 7.5m0 0l3 3L22 7l-3-3m-3.5 3.5L19 4"/></svg></div>
+              <h4><code>only</code> Access Guard</h4>
+              <p>Declare who can call a function in one word. Works with any address variable — <code>owner</code>, <code>admin</code>, <code>self</code>, or a custom role.</p>
+              <div class="code-window"><div class="code-window-bar"><span class="dot red"></span><span class="dot yellow"></span><span class="dot green"></span></div><pre><code id="ref-safe-only-code"></code></pre></div>
+            </div>
+            <div class="ref-safety-card">
+              <div class="rsafe-icon-wrap" style="--c:#34d399" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="5" y="11" width="14" height="10" rx="2"/><path d="M9 11V7a3 3 0 0 1 6 0v4"/></svg></div>
+              <h4><code>lock</code> Reentrancy Guard</h4>
+              <p>One keyword injects a complete mutex that prevents any reentrant call to the function. The compiler inserts set/clear logic around the entire function body.</p>
+              <div class="code-window"><div class="code-window-bar"><span class="dot red"></span><span class="dot yellow"></span><span class="dot green"></span></div><pre><code id="ref-safe-lock-code"></code></pre></div>
+            </div>
+            <div class="ref-safety-card">
+              <div class="rsafe-icon-wrap" style="--c:#f472b6" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3v18M8 15l4 4 4-4"/><rect x="6" y="5" width="12" height="6" rx="1" opacity="0.5"/></svg></div>
+              <h4><code>payable</code> Guard</h4>
+              <p>Functions without <code>payable</code> automatically reject any call that sends ETH. This prevents accidental ETH locking.</p>
+              <div class="code-window"><div class="code-window-bar"><span class="dot red"></span><span class="dot yellow"></span><span class="dot green"></span></div><pre><code id="ref-safe-payable-code"></code></pre></div>
+            </div>
+            <div class="ref-safety-card">
+              <div class="rsafe-icon-wrap" style="--c:#22d3ee" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M2 12h20M12 2a15 15 0 0 1 0 20M12 2a15 15 0 0 0 0 20"/></svg></div>
+              <h4>Mapping Defaults</h4>
+              <p>Accessing an unset mapping key never throws. It returns the zero value for the type — <code>0</code> for numbers, the zero address for addresses, <code>false</code> for booleans.</p>
+              <div class="code-window"><div class="code-window-bar"><span class="dot red"></span><span class="dot yellow"></span><span class="dot green"></span></div><pre><code id="ref-safe-map-code"></code></pre></div>
+            </div>
+            <div class="ref-safety-card">
+              <div class="rsafe-icon-wrap" style="--c:#a78bfa" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="11" cy="11" r="7"/><path d="M21 21l-4.35-4.35"/><path d="M8 10h6M8 13h4" opacity="0.85"/></svg></div>
+              <h4>Readable Error Messages</h4>
+              <p>Compiler errors include line/column pointers, the offending code, and a specific help hint — not just a cryptic code.</p>
+              <div class="code-window"><div class="code-window-bar"><span class="dot red"></span><span class="dot yellow"></span><span class="dot green"></span></div><pre><code id="ref-safe-err-code"></code></pre></div>
+            </div>
+          </div>
+        </div>
+
+        <!-- CLI -->
+        <div class="ref-pane" id="ref-cli">
+          <h3 class="ref-pane-title">Compiler CLI — <code>misolc</code></h3>
+          <p class="ref-pane-sub">All tooling in one binary. Compile, check, format, test, and generate docs.</p>
+          <div class="ref-table-wrap">
+            <table class="ref-table">
+              <thead><tr><th>Command</th><th>What it does</th></tr></thead>
+              <tbody>
+                <tr><td><code>misolc compile &lt;file&gt;</code></td><td>Compile to EVM bytecode and output ABI JSON</td></tr>
+                <tr><td><code>misolc check &lt;file&gt;</code></td><td>Type-check and safety-check only — no bytecode output</td></tr>
+                <tr><td><code>misolc abi &lt;file&gt;</code></td><td>Output the ABI JSON for the contract</td></tr>
+                <tr><td><code>misolc test &lt;dir&gt;</code></td><td>Run all <code>.miso</code> test files in a directory</td></tr>
+                <tr><td><code>misolc fmt &lt;file&gt;</code></td><td>Auto-format the source file (opinionated, like <code>gofmt</code>)</td></tr>
+                <tr><td><code>misolc docs &lt;file&gt;</code></td><td>Generate HTML documentation from <code>---</code> doc comments</td></tr>
+              </tbody>
+            </table>
+          </div>
+          <div class="ref-code-example">
+            <div class="code-window">
+              <div class="code-window-bar"><span class="dot red"></span><span class="dot yellow"></span><span class="dot green"></span><span class="code-window-title">terminal</span></div>
+              <pre><code id="ref-cli-code"></code></pre>
+            </div>
+          </div>
+        </div>
+
+      </div><!-- /ref-body -->
+    </div>
+  </section>
+
+  <!-- ──────────────── SYNTAX COMPARISON ──────────────── -->
+  <section id="syntax" aria-label="Syntax comparison">
+    <div class="container">
+      <div class="section-badge">Syntax</div>
+      <h2 class="section-title">Misoltav vs Solidity</h2>
+      <p class="section-sub">The same logic — far fewer words. Click any tab to see the comparison.</p>
+      <div class="compare-tabs" id="compare-tabs" role="tablist">
+        <button class="tab active" data-tab="0" id="tab-0" role="tab" aria-selected="true">Contract</button>
+        <button class="tab" data-tab="1" id="tab-1" role="tab" aria-selected="false">Mint</button>
+        <button class="tab" data-tab="2" id="tab-2" role="tab" aria-selected="false">Transfer</button>
+        <button class="tab" data-tab="3" id="tab-3" role="tab" aria-selected="false">Withdraw</button>
+        <button class="tab" data-tab="4" id="tab-4" role="tab" aria-selected="false">Events</button>
+        <button class="tab" data-tab="5" id="tab-5" role="tab" aria-selected="false">Payable</button>
+      </div>
+      <div class="compare-grid" id="compare-grid">
+        <div class="compare-pane" id="compare-sol">
+          <div class="compare-pane-header">
+            <span class="lang-badge sol">Solidity</span>
+          </div>
+          <pre id="sol-code"><code></code></pre>
+        </div>
+        <div class="compare-pane" id="compare-miso">
+          <div class="compare-pane-header">
+            <span class="lang-badge miso">Misoltav</span>
+            <span class="compare-stat" id="compare-stat"></span>
+          </div>
+          <pre id="miso-code"><code></code></pre>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ──────────────── EXAMPLES ──────────────── -->
+  <section id="examples" aria-label="Code examples">
+    <div class="container">
+      <div class="section-badge">Examples</div>
+      <h2 class="section-title">Real Contracts, Real Simple</h2>
+      <p class="section-sub">Six production-ready contract patterns written in Misoltav.</p>
+      <div class="examples-selector" id="examples-selector" role="tablist">
+        <button class="ex-tab active" data-ex="0" id="ex-tab-0" role="tab">Token</button>
+        <button class="ex-tab" data-ex="1" id="ex-tab-1" role="tab">Voting</button>
+        <button class="ex-tab" data-ex="2" id="ex-tab-2" role="tab">Crowdfunding</button>
+        <button class="ex-tab" data-ex="3" id="ex-tab-3" role="tab">NFT</button>
+        <button class="ex-tab" data-ex="4" id="ex-tab-4" role="tab">Escrow</button>
+        <button class="ex-tab" data-ex="5" id="ex-tab-5" role="tab">Hello World</button>
+      </div>
+      <div class="example-display">
+        <div class="code-window big">
+          <div class="code-window-bar">
+            <span class="dot red"></span>
+            <span class="dot yellow"></span>
+            <span class="dot green"></span>
+            <span class="code-window-title" id="ex-filename">Token.miso</span>
+            <button class="copy-btn" id="copy-btn" aria-label="Copy code">Copy</button>
+          </div>
+          <pre id="ex-code-display"><code></code></pre>
+        </div>
+        <div class="example-desc" id="example-desc">
+          <h3 id="ex-title">ERC-20 Style Token</h3>
+          <p id="ex-body">A fully functional fungible token with mint, burn, transfer, and approval — in fewer than 40 lines with no imports.</p>
+          <ul class="ex-features" id="ex-features"></ul>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ──────────────── ARCHITECTURE ──────────────── -->
+  <section id="architecture" aria-label="Compiler architecture">
+    <div class="container">
+      <div class="section-badge">Architecture</div>
+      <h2 class="section-title">How the Compiler Works</h2>
+      <p class="section-sub">Eight clean stages from source to EVM bytecode.</p>
+      <div class="arch-pipeline" id="arch-pipeline">
+        <div class="arch-step" id="arch-1" style="--delay:0s">
+          <div class="arch-step-num">1</div>
+          <div class="arch-icon-wrap" style="--c:#a78bfa" aria-hidden="true" title="Token stream">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><line x1="4" y1="7" x2="14" y2="7"/><line x1="4" y1="12" x2="20" y2="12"/><line x1="4" y1="17" x2="10" y2="17"/><circle cx="18" cy="7" r="2" fill="currentColor" stroke="none" opacity="0.5"/></svg>
+          </div>
+          <div class="arch-step-name">Lexer</div>
+          <div class="arch-step-desc">Tokenises source into a stream including special INDENT/DEDENT tokens for blocks</div>
+        </div>
+        <div class="arch-arrow" aria-hidden="true">→</div>
+        <div class="arch-step" id="arch-2" style="--delay:0.1s">
+          <div class="arch-step-num">2</div>
+          <div class="arch-icon-wrap" style="--c:#34d399" aria-hidden="true" title="Syntax tree">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="4" r="2"/><path d="M12 6v3"/><circle cx="6" cy="14" r="2"/><circle cx="18" cy="14" r="2"/><path d="M12 9L6 12M12 9l6 3"/><path d="M6 16v3M18 16v3"/></svg>
+          </div>
+          <div class="arch-step-name">Parser</div>
+          <div class="arch-step-desc">Recursive-descent pass produces a typed Abstract Syntax Tree</div>
+        </div>
+        <div class="arch-arrow" aria-hidden="true">→</div>
+        <div class="arch-step" id="arch-3" style="--delay:0.2s">
+          <div class="arch-step-num">3</div>
+          <div class="arch-icon-wrap" style="--c:#38bdf8" aria-hidden="true" title="Symbol table">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><ellipse cx="12" cy="5" rx="4" ry="2"/><path d="M8 5v4c0 1.1 1.8 2 4 2s4-.9 4-2V5"/><path d="M8 9v4c0 1.1 1.8 2 4 2s4-.9 4-2V9"/><path d="M8 13v4c0 1.1 1.8 2 4 2s4-.9 4-2v-4"/></svg>
+          </div>
+          <div class="arch-step-name">Name Resolver</div>
+          <div class="arch-step-desc">Resolves symbols and builds a complete scope/symbol table</div>
+        </div>
+        <div class="arch-arrow" aria-hidden="true">→</div>
+        <div class="arch-step" id="arch-4" style="--delay:0.3s">
+          <div class="arch-step-num">4</div>
+          <div class="arch-icon-wrap" style="--c:#c084fc" aria-hidden="true" title="Type inference">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 6h16M4 12h12M4 18h8"/><circle cx="19" cy="6" r="2"/><circle cx="15" cy="12" r="2"/><circle cx="11" cy="18" r="2"/></svg>
+          </div>
+          <div class="arch-step-name">Type Inferrer</div>
+          <div class="arch-step-desc">Infers types for all nodes — no annotation needed from the developer</div>
+        </div>
+        <div class="arch-arrow" aria-hidden="true">→</div>
+        <div class="arch-step" id="arch-5" style="--delay:0.4s">
+          <div class="arch-step-num">5</div>
+          <div class="arch-icon-wrap" style="--c:#4ade80" aria-hidden="true" title="Guards & checks">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+          </div>
+          <div class="arch-step-name">Safety Passes</div>
+          <div class="arch-step-desc">Checks only/lock/payable guards, overflow paths, and reentrancy graphs</div>
+        </div>
+        <div class="arch-arrow" aria-hidden="true">→</div>
+        <div class="arch-step" id="arch-6" style="--delay:0.5s">
+          <div class="arch-step-num">6</div>
+          <div class="arch-icon-wrap" style="--c:#94a3b8" aria-hidden="true" title="Transform pipeline">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M4.93 19.07l1.41-1.41M17.66 6.34l1.41-1.41"/></svg>
+          </div>
+          <div class="arch-step-name">IR Lowering</div>
+          <div class="arch-step-desc">Converts typed AST into Misoltav Intermediate Representation (MIR)</div>
+        </div>
+        <div class="arch-arrow" aria-hidden="true">→</div>
+        <div class="arch-step" id="arch-7" style="--delay:0.6s">
+          <div class="arch-step-num">7</div>
+          <div class="arch-icon-wrap" style="--c:#fb923c" aria-hidden="true" title="Prune & fold">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="6" cy="6" r="3"/><circle cx="6" cy="18" r="3"/><path d="M20 4L8.12 15.88M14.47 14.48L20 20M8.12 8.12L12 12"/></svg>
+          </div>
+          <div class="arch-step-name">Optimiser</div>
+          <div class="arch-step-desc">Constant folding, dead-code elimination, and gas-usage reduction</div>
+        </div>
+        <div class="arch-arrow" aria-hidden="true">→</div>
+        <div class="arch-step" id="arch-8" style="--delay:0.7s">
+          <div class="arch-step-num">8</div>
+          <div class="arch-icon-wrap" style="--c:#22d3ee" aria-hidden="true" title="Bytecode output">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="3" width="20" height="14" rx="2"/><path d="M8 21h8M12 17v4"/><path d="M7 8h2M11 8h2M15 8h2M7 12h6"/></svg>
+          </div>
+          <div class="arch-step-name">EVM Codegen</div>
+          <div class="arch-step-desc">Emits EVM bytecode and auto-generates a complete ABI JSON file</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ──────────────── KEYWORDS ──────────────── -->
+  <section id="keywords" aria-label="Built-in keywords">
+    <div class="container">
+      <div class="kw-grid">
+        <div class="kw-col" id="kw-guards">
+          <h3>Guard Keywords</h3>
+          <div class="kw-table">
+            <div class="kw-row"><span class="kw-pill">only owner</span><span>Reverts if sender ≠ owner</span></div>
+            <div class="kw-row"><span class="kw-pill">lock</span><span>Reentrancy mutex</span></div>
+            <div class="kw-row"><span class="kw-pill">payable</span><span>Accepts ETH; rejects without it</span></div>
+          </div>
+        </div>
+        <div class="kw-col" id="kw-context">
+          <h3>Context Variables</h3>
+          <div class="kw-table">
+            <div class="kw-row"><span class="kw-pill">sender</span><span>msg.sender</span></div>
+            <div class="kw-row"><span class="kw-pill">value</span><span>msg.value — ETH sent</span></div>
+            <div class="kw-row"><span class="kw-pill">now</span><span>block.timestamp</span></div>
+            <div class="kw-row"><span class="kw-pill">block</span><span>block.number</span></div>
+            <div class="kw-row"><span class="kw-pill">self</span><span>address(this)</span></div>
+            <div class="kw-row"><span class="kw-pill">gas</span><span>gasleft()</span></div>
+          </div>
+        </div>
+        <div class="kw-col" id="kw-builtins">
+          <h3>Built-in Functions</h3>
+          <div class="kw-table">
+            <div class="kw-row"><span class="kw-pill">send(to, amount)</span><span>Transfer ETH</span></div>
+            <div class="kw-row"><span class="kw-pill">hash(data)</span><span>keccak256</span></div>
+            <div class="kw-row"><span class="kw-pill">require(cond)</span><span>Revert on failure</span></div>
+            <div class="kw-row"><span class="kw-pill">revert(msg)</span><span>Revert with message</span></div>
+            <div class="kw-row"><span class="kw-pill">emit Event(…)</span><span>Emit a log event</span></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ──────────────── USE CASES ──────────────── -->
+  <section id="usecases" aria-label="Use cases">
+    <div class="container">
+      <div class="section-badge">Use Cases</div>
+      <h2 class="section-title">What You Can Build</h2>
+      <p class="section-sub">From simple tokens to complex DeFi protocols — Misoltav grows with you.</p>
+      <div class="usecases-grid">
+        <div class="uc-card" id="uc-1">
+          <div class="uc-icon-wrap" style="--c:#e5c07b" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="8"/><path d="M12 8v8M8 12h8" stroke-linecap="round"/></svg></div>
+          <div class="uc-name">Fungible Token</div><div class="uc-tech">balance[address] · only · events</div></div>
+        <div class="uc-card" id="uc-2">
+          <div class="uc-icon-wrap" style="--c:#7c3aed" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"><rect x="3" y="5" width="18" height="14" rx="2"/><circle cx="8.5" cy="10" r="1.5" fill="currentColor"/><path d="M21 19l-5-5"/></svg></div>
+          <div class="uc-name">NFT Collection</div><div class="uc-tech">ownerOf[address] · struct · events</div></div>
+        <div class="uc-card" id="uc-3">
+          <div class="uc-icon-wrap" style="--c:#94a3b8" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 20h16M6 20V10l4-2v12M14 20V8l4 2v10"/><path d="M10 6V4h4v2"/></svg></div>
+          <div class="uc-name">DAO Voting</div><div class="uc-tech">struct · hasVoted[address] · only</div></div>
+        <div class="uc-card" id="uc-4">
+          <div class="uc-icon-wrap" style="--c:#f97316" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2L9 12h6L12 2z"/><path d="M12 12v10"/><path d="M9 17l3 5 3-5M7 14H5M19 14h-2"/></svg></div>
+          <div class="uc-name">Crowdfunding</div><div class="uc-tech">payable · enum · lock · time units</div></div>
+        <div class="uc-card" id="uc-5">
+          <div class="uc-icon-wrap" style="--c:#eab308" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M8 12a4 4 0 0 1 8 0"/><path d="M6 16c1.5 2 3.5 3 6 3s4.5-1 6-3"/><path d="M4 20c2 2 4 3 8 3s6-1 8-3"/></svg></div>
+          <div class="uc-name">Escrow</div><div class="uc-tech">lock · enum state machine · only</div></div>
+        <div class="uc-card" id="uc-6">
+          <div class="uc-icon-wrap" style="--c:#34d399" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="5" y="11" width="14" height="10" rx="2"/><path d="M9 11V7a3 3 0 0 1 6 0v4"/><circle cx="12" cy="16" r="1" fill="currentColor"/><path d="M16 8l3-2v4"/></svg></div>
+          <div class="uc-name">Multi-sig Wallet</div><div class="uc-tech">approved[address][address] · threshold</div></div>
+        <div class="uc-card" id="uc-7">
+          <div class="uc-icon-wrap" style="--c:#22d3ee" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><polyline points="12 7 12 12 16 14"/><path d="M4 4l2 2M20 4l-2 2M4 20l2-2M20 20l-2-2" opacity="0.5"/></svg></div>
+          <div class="uc-name">Staking Pool</div><div class="uc-tech">time arithmetic · send · lock</div></div>
+        <div class="uc-card" id="uc-8">
+          <div class="uc-icon-wrap" style="--c:#fbbf24" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 16h16M4 16V8l4-2v10M12 6V4h6v12"/><circle cx="18" cy="6" r="1" fill="currentColor"/></svg></div>
+          <div class="uc-name">Supply Chain</div><div class="uc-tech">enum stages · only · event audit</div></div>
+        <div class="uc-card" id="uc-9">
+          <div class="uc-icon-wrap" style="--c:#a78bfa" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"><path d="M3 21h18M5 21V10l7-5 7 5v11"/><path d="M9 21v-6h6v6"/></svg></div>
+          <div class="uc-name">Land Registry</div><div class="uc-tech">struct · ownerOf · access control</div></div>
+        <div class="uc-card" id="uc-10">
+          <div class="uc-icon-wrap" style="--c:#f472b6" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"><rect x="4" y="4" width="16" height="16" rx="3"/><circle cx="9.5" cy="9.5" r="1.5" fill="currentColor"/><circle cx="14.5" cy="14.5" r="1.5" fill="currentColor"/><path d="M14.5 9.5h.01M9.5 14.5h.01"/></svg></div>
+          <div class="uc-name">Lottery</div><div class="uc-tech">payable · send · array of players</div></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ──────────────── ROADMAP ──────────────── -->
+  <section id="roadmap" aria-label="Development roadmap">
+    <div class="container">
+      <div class="section-badge">Roadmap</div>
+      <h2 class="section-title">The Journey Ahead</h2>
+      <p class="section-sub">Ten phases from specification to a full browser-based playground.</p>
+      <div class="roadmap-track" id="roadmap-track">
+        <div class="rm-item done"   id="rm-1"><div class="rm-dot" aria-hidden="true"></div><div class="rm-content"><span class="rm-phase">Phase 1</span><strong>Language Specification</strong><span class="rm-tag done-tag"><svg class="rm-check" viewBox="0 0 24 24" aria-hidden="true"><path d="M20 6L9 17l-5-5" stroke-linecap="round" stroke-linejoin="round"/></svg>Complete</span></div></div>
+        <div class="rm-item"       id="rm-2"><div class="rm-dot"></div><div class="rm-content"><span class="rm-phase">Phase 2</span><strong>Lexer + Parser (Rust)</strong><span class="rm-tag">Planned</span></div></div>
+        <div class="rm-item"       id="rm-3"><div class="rm-dot"></div><div class="rm-content"><span class="rm-phase">Phase 3</span><strong>Type Inference Engine</strong><span class="rm-tag">Planned</span></div></div>
+        <div class="rm-item"       id="rm-4"><div class="rm-dot"></div><div class="rm-content"><span class="rm-phase">Phase 4</span><strong>Safety Pass (only / lock / payable)</strong><span class="rm-tag">Planned</span></div></div>
+        <div class="rm-item"       id="rm-5"><div class="rm-dot"></div><div class="rm-content"><span class="rm-phase">Phase 5</span><strong>EVM Bytecode Backend</strong><span class="rm-tag">Planned</span></div></div>
+        <div class="rm-item"       id="rm-6"><div class="rm-dot"></div><div class="rm-content"><span class="rm-phase">Phase 6</span><strong>Standard Library (std.tokens · std.access)</strong><span class="rm-tag">Planned</span></div></div>
+        <div class="rm-item"       id="rm-7"><div class="rm-dot"></div><div class="rm-content"><span class="rm-phase">Phase 7</span><strong>Test Framework (misolc test)</strong><span class="rm-tag">Planned</span></div></div>
+        <div class="rm-item"       id="rm-8"><div class="rm-dot"></div><div class="rm-content"><span class="rm-phase">Phase 8</span><strong>LSP Server — IDE Autocomplete</strong><span class="rm-tag">Planned</span></div></div>
+        <div class="rm-item"       id="rm-9"><div class="rm-dot"></div><div class="rm-content"><span class="rm-phase">Phase 9</span><strong>WASM Backend (non-EVM chains)</strong><span class="rm-tag">Planned</span></div></div>
+        <div class="rm-item"       id="rm-10"><div class="rm-dot"></div><div class="rm-content"><span class="rm-phase">Phase 10</span><strong>Browser Playground IDE</strong><span class="rm-tag">Planned</span></div></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ──────────────── FOOTER ──────────────── -->
+  <footer id="footer">
+    <div class="container">
+      <div class="footer-inner">
+        <div class="footer-brand">
+          <a href="#hero" class="logo" aria-label="Back to top">
+            <span class="logo-icon">⬡</span>
+            <span class="logo-text">Misoltav</span>
+          </a>
+          <p>The beginner smart contract language.<br/>Readable. Safe. Minimal by design.</p>
+        </div>
+        <div class="footer-links">
+          <h4>Language</h4>
+          <a href="#features">Features</a>
+          <a href="#syntax">Syntax</a>
+          <a href="#examples">Examples</a>
+          <a href="#architecture">Architecture</a>
+        </div>
+        <div class="footer-links">
+          <h4>Project</h4>
+          <a href="#usecases">Use Cases</a>
+          <a href="#roadmap">Roadmap</a>
+        </div>
+      </div>
+      <div class="footer-bottom">
+        <span>Misoltav Language Specification v2.0 · 2026 · Apache 2.0 License</span>
+      </div>
+    </div>
+  </footer>
+
+  <!-- ──────────────── PLAYGROUND MODAL ──────────────── -->
+  <div id="playground-overlay" class="pg-overlay" role="dialog" aria-modal="true" aria-label="Misoltav Playground" hidden>
+    <div class="pg-modal">
+
+      <!-- Header -->
+      <div class="pg-header">
+        <div class="pg-title">
+          <span class="pg-logo">⬡</span>
+          <span>Misoltav Playground</span>
+          <span class="pg-badge">v2.0</span>
+        </div>
+        <div class="pg-header-actions">
+          <select class="pg-select" id="pg-sample-select" aria-label="Load sample contract">
+            <option value="hello">Hello World</option>
+            <option value="storage">Storage</option>
+          </select>
+          <button class="pg-btn pg-btn-run" id="pg-run-btn" aria-label="Compile and check">
+            <span class="pg-run-icon">▶</span> Run
+          </button>
+          <button class="pg-btn pg-btn-deploy" id="pg-deploy-btn" aria-label="Deploy to local VM" disabled title="Compile first">
+            Deploy
+          </button>
+          <button class="pg-btn pg-btn-close" id="pg-close-btn" aria-label="Close playground">✕</button>
+        </div>
+      </div>
+
+      <!-- Split pane -->
+      <div class="pg-body">
+
+        <!-- Editor pane -->
+        <div class="pg-editor-pane">
+          <div class="pg-pane-label">Editor <span class="pg-pane-sub">— type your Misoltav contract</span></div>
+          <div class="pg-editor-wrap">
+            <div class="pg-line-nums" id="pg-line-nums" aria-hidden="true"></div>
+            <textarea
+              id="pg-editor"
+              class="pg-editor"
+              spellcheck="false"
+              autocorrect="off"
+              autocapitalize="off"
+              autocomplete="off"
+              aria-label="Misoltav code editor"
+              placeholder="Write your contract here…"
+            ></textarea>
+            <pre class="pg-highlight-layer" id="pg-highlight" aria-hidden="true"><code></code></pre>
+          </div>
+        </div>
+
+        <!-- Output pane -->
+        <div class="pg-output-pane">
+
+          <!-- Tab header -->
+          <div class="pg-out-tabs">
+            <button class="pg-out-tab active" id="pg-tab-compile" data-tab="compile" aria-selected="true">
+              <span class="pg-out-tab-dot pg-out-tab-dot-compile"></span>Compile
+            </button>
+            <button class="pg-out-tab" id="pg-tab-console" data-tab="console" aria-selected="false">
+              <span class="pg-out-tab-dot pg-out-tab-dot-console"></span>Console
+              <span class="pg-console-badge" id="pg-console-badge" hidden>0</span>
+            </button>
+            <button class="pg-out-tab" id="pg-tab-deployed" data-tab="deployed" aria-selected="false">
+              <span class="pg-out-tab-dot pg-out-tab-dot-deploy"></span>Deployed
+            </button>
+            <div class="pg-out-tab-spacer"></div>
+            <span id="pg-output-status" class="pg-out-status">— press Run to compile</span>
+          </div>
+
+          <!-- Compile panel -->
+          <div class="pg-out-panel" id="pg-panel-compile">
+            <div class="pg-output" id="pg-output">
+              <div class="pg-output-welcome">
+                <div class="pg-welcome-icon">⬡</div>
+                <p>Write a contract and press <strong>Run</strong> to see the compiler output.</p>
+                <p class="pg-welcome-hint">Choose a sample from the dropdown to get started quickly.</p>
+              </div>
+            </div>
+          </div>
+
+          <!-- Console panel -->
+          <div class="pg-out-panel" id="pg-panel-console" hidden>
+            <div class="pg-console-toolbar">
+              <span class="pg-console-label">› Misoltav Runtime Console</span>
+              <button class="pg-console-clear" id="pg-console-clear" title="Clear console">⌫ Clear</button>
+            </div>
+            <div class="pg-console-body" id="pg-console-body">
+              <div class="pg-console-hint">Console output will appear here after ▶ Run.</div>
+            </div>
+            <div class="pg-console-input-row">
+              <span class="pg-console-prompt">&gt;</span>
+              <input
+                type="text"
+                id="pg-console-input"
+                class="pg-console-input"
+                placeholder="Type an expression… (e.g. balance[sender])"
+                autocomplete="off" spellcheck="false"
+              />
+            </div>
+          </div>
+
+          <!-- Remix-style Deployed Contracts -->
+          <div class="pg-out-panel" id="pg-panel-deployed" hidden>
+            <div class="pg-deployed-scroll" id="pg-deployed-root">
+              <div class="pg-deployed-empty" id="pg-deployed-empty">
+                <p><strong>Deployed Contracts</strong></p>
+                <p class="pg-deployed-empty-hint">Compile successfully, then press <strong>Deploy</strong> in the header to interact like Remix.</p>
+              </div>
+            </div>
+          </div>
+
+        </div>
+
+
+      </div><!-- /pg-body -->
+
+      <!-- Status bar -->
+      <div class="pg-statusbar">
+        <span id="pg-char-count">0 chars</span>
+        <span id="pg-line-count">0 lines</span>
+        <span class="pg-statusbar-lang">Misoltav · .miso</span>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- Three.js via CDN -->
+  <script src="https://cdn.jsdelivr.net/npm/three@0.161.0/build/three.min.js"></script>
+  <script src="app.js"></script>
+</body>
+</html>
