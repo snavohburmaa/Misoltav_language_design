@@ -10,7 +10,7 @@
     "build:compiler": "node build-compiler-browser.js"
   },
   "engines": {
-    "node": "18"
+    "node": "24.x"
   },
   "dependencies": {
     "ethereum-cryptography": "^3.2.0",
