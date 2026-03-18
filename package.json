@@ -1,0 +1,22 @@
+{
+  "name": "misoltav",
+  "version": "2.0.0",
+  "description": "Misoltav language — website + playground with real compiler",
+  "type": "module",
+  "scripts": {
+    "start": "node server.js",
+    "playground": "node server.js",
+    "compile:cli": "node compiler/cli.js",
+    "build:compiler": "node build-compiler-browser.js"
+  },
+  "engines": {
+    "node": ">=18"
+  },
+  "dependencies": {
+    "ethereum-cryptography": "^3.2.0",
+    "express": "^4.21.0"
+  },
+  "devDependencies": {
+    "esbuild": "^0.24.0"
+  }
+}

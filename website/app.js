@@ -209,142 +209,6 @@ const EXAMPLES = [
         return proposals[proposalId].voteCount`,
   },
   {
-    title: 'Crowdfunding',
-    filename: 'Crowdfunding.miso',
-    desc: 'A time-bounded crowdfunding campaign with Ether contributions, automatic goal detection, admin withdrawal, and backer refunds.',
-    features: ['payable contributions', 'Automatic goal tracking', 'Reentrancy-safe withdrawal', 'Full backer refund logic'],
-    code: `contract Crowdfunding
-    admin    = sender
-    goal     = 0
-    deadline = 0
-    raised   = 0
-
-    enum Status:
-        Active
-        Successful
-        Failed
-
-    status    = Status.Active
-    backers[address]
-
-    event Contributed(backer, amount)
-    event GoalReached(total)
-    event Refunded(backer, amount)
-
-    function init(goalAmount, durationDays):
-        only admin
-        goal     = goalAmount
-        deadline = now + durationDays * 1 days
-
-    function contribute():
-        payable
-        require now < deadline,           "Campaign ended"
-        require status == Status.Active,  "Not active"
-        backers[sender] += value
-        raised += value
-        emit Contributed(backer: sender, amount: value)
-        if raised >= goal:
-            status = Status.Successful
-            emit GoalReached(total: raised)
-
-    function withdraw():
-        lock
-        only admin
-        require status == Status.Successful
-        send(admin, raised)
-        raised = 0
-
-    function refund():
-        lock
-        require now >= deadline
-        require status != Status.Successful
-        amount = backers[sender]
-        require amount > 0, "Nothing to refund"
-        backers[sender] = 0
-        send(sender, amount)
-        emit Refunded(backer: sender, amount: amount)`,
-  },
-  {
-    title: 'NFT Collection',
-    filename: 'SimpleNFT.miso',
-    desc: 'A simple ERC-721 style NFT contract. Admin mints with a custom URI; owners can transfer tokens.',
-    features: ['Admin-only mint', 'Per-token URI storage', 'Ownership mapping', 'Transfer with ownership check'],
-    code: `contract SimpleNFT
-    admin   = sender
-    nextId  = 0
-
-    ownerOf[address]
-    tokenURI[address]
-
-    event Minted(to, tokenId, uri)
-    event Transferred(from, to, tokenId)
-
-    function mint(to, uri):
-        only admin
-        tokenId = nextId
-        nextId += 1
-        ownerOf[tokenId] = to
-        tokenURI[tokenId] = uri
-        emit Minted(to: to, tokenId: tokenId, uri: uri)
-
-    function transfer(to, tokenId):
-        require ownerOf[tokenId] == sender, "Not owner"
-        ownerOf[tokenId] = to
-        emit Transferred(from: sender, to: to, tokenId: tokenId)
-
-    function getOwner(tokenId):
-        return ownerOf[tokenId]
-
-    function getURI(tokenId):
-        return tokenURI[tokenId]`,
-  },
-  {
-    title: 'Escrow',
-    filename: 'Escrow.miso',
-    desc: 'A two-party escrow where a buyer locks funds and either releases to the seller or gets a refund — with reentrancy protection.',
-    features: ['Buyer deposits ETH', 'Reentrancy-safe release & refund', 'Enum state machine', 'Seller set by buyer'],
-    code: `contract Escrow
-    buyer  = sender
-    seller = 0x0000000000000000000000000000000000000000
-    amount = 0
-
-    enum State:
-        Awaiting
-        Complete
-        Refunded
-
-    state = State.Awaiting
-
-    event Released(to, amount)
-    event Refunded(to, amount)
-
-    function setSeller(addr):
-        only buyer
-        seller = addr
-
-    function deposit():
-        payable
-        only buyer
-        require state == State.Awaiting
-        amount = value
-
-    function release():
-        lock
-        only buyer
-        require state == State.Awaiting
-        state = State.Complete
-        send(seller, amount)
-        emit Released(to: seller, amount: amount)
-
-    function refundBuyer():
-        lock
-        only seller
-        require state == State.Awaiting
-        state = State.Refunded
-        send(buyer, amount)
-        emit Refunded(to: buyer, amount: amount)`,
-  },
-  {
     title: 'Hello World',
     filename: 'HelloWorld.miso',
     desc: 'The simplest possible Misoltav contract — store a string and return it. Perfect as a first contract.',
@@ -695,7 +559,7 @@ function initExamples() {
    ────────────────────────────────────────────── */
 function initScrollAnimations() {
   const targets = document.querySelectorAll(
-    '.pillar-card, .feature-card, .arch-step, .uc-card, .rm-item'
+    '.pillar-card, .feature-card, .arch-step, .uc-card, .rm-item, .dev-card'
   );
   const delays = {
     'pillar-card':  [0, 0.15, 0.3],
@@ -703,6 +567,7 @@ function initScrollAnimations() {
     'arch-step':    [0, 0.08, 0.16, 0.24, 0.32, 0.4, 0.48, 0.56],
     'uc-card':      Array.from({length:10}, (_,i) => i * 0.05),
     'rm-item':      Array.from({length:10}, (_,i) => i * 0.06),
+    'dev-card':     [0, 0.06, 0.12, 0.18, 0.24, 0.3],
   };
 
   const grouped = {};
@@ -1264,6 +1129,47 @@ const PG_SAMPLES = {
     function example():
         only owner
         -- write your logic here`,
+
+  token: `contract Token
+    owner   = sender
+    name    = "MisoToken"
+    symbol  = "MISO"
+    supply  = 0
+
+    balance[address]
+    allowance[address][address]
+
+    event Transfer(from, to, amount)
+    event Approval(owner, spender, amount)
+
+    function mint(user, amount):
+        only owner
+        balance[user] += amount
+        supply += amount
+        emit Transfer(from: self, to: user, amount: amount)
+
+    function transfer(to, amount):
+        require balance[sender] >= amount
+        balance[sender] -= amount
+        balance[to] += amount
+        emit Transfer(from: sender, to: to, amount: amount)
+
+    function approve(spender, amount):
+        allowance[sender][spender] = amount
+        emit Approval(owner: sender, spender: spender, amount: amount)
+
+    function transferFrom(from, to, amount):
+        require allowance[from][sender] >= amount
+        require balance[from] >= amount
+        allowance[from][sender] -= amount
+        balance[from] -= amount
+        balance[to] += amount
+        emit Transfer(from: from, to: to, amount: amount)
+
+    function burn(amount):
+        require balance[sender] >= amount
+        balance[sender] -= amount
+        supply -= amount`,
 };
 
 /* ── Compiler simulation ─────────────────────── */
@@ -1390,9 +1296,13 @@ function isRemixCallOnly(fnName) {
   return false;
 }
 
-function pgRender(out, result, elapsed, onDone) {
+function pgRender(out, result, elapsed, onDone, realCompiler) {
   const { contractName, functions, events, stateVars, errors, warns } = result;
   const ts = new Date().toLocaleTimeString();
+  const realError = realCompiler?.realError;
+  const realSolidity = realCompiler?.realSolidity;
+  const realBytecode = realCompiler?.realBytecode;
+  const isNative = !!realBytecode;
 
   let html = '';
 
@@ -1401,11 +1311,33 @@ function pgRender(out, result, elapsed, onDone) {
   <div class="remix-logline remix-logline-hdr">
     <span class="remix-badge remix-badge-info">i</span>
     <span class="remix-logline-ts">[${ts}]</span>
-    <span class="remix-logline-txt">misolc ${MISOLC_VERSION} compilation started</span>
+    <span class="remix-logline-txt">misolc ${MISOLC_VERSION} compilation started${isNative ? ' (native Misoltav → bytecode)' : realSolidity ? ' (transpile to Solidity)' : ''}</span>
     <span class="remix-logline-elapsed">${elapsed} ms</span>
   </div>`;
 
-  /* ── ERRORS ── */
+  /* ── Real compiler error (from server) — show and stop ── */
+  if (realError) {
+    html += `
+    <div class="remix-logline remix-logline-err">
+      <span class="remix-badge remix-badge-err">✕</span>
+      <span class="remix-logline-ts">[${ts}]</span>
+      <span class="remix-logline-txt"><span class="remix-err-loc">real compiler</span> ${esc(realError)}</span>
+    </div>
+    <div class="remix-compile-box remix-compile-box-err">
+      <div class="remix-compile-box-title"><span class="remix-icon-err">✕</span> Real compiler failed</div>
+      <div class="remix-compile-detail">Fix the error above and try again. You can also run <code>node compiler/cli.js compile file.miso</code> locally.</div>
+    </div>
+    <div class="remix-logline remix-logline-ok">
+      <span class="remix-badge remix-badge-ok">✓</span>
+      <span class="remix-logline-ts">[${ts}]</span>
+      <span class="remix-logline-txt">Compilation finished in ${elapsed}&thinsp;ms</span>
+    </div>`;
+    out.innerHTML = html;
+    if (typeof onDone === 'function') onDone({ ok: false, contractName, errors: [{ ln: 0, msg: realError }] });
+    return;
+  }
+
+  /* ── ERRORS (client-side parse) ── */
   if (errors.length) {
     errors.forEach(e => {
       html += `
@@ -1468,8 +1400,8 @@ function pgRender(out, result, elapsed, onDone) {
   }
 
   /* ── CONTRACT INFO BOX ── */
-  const bytecode  = fakeBytecode(contractName);
-  const byteLen   = Math.floor(bytecode.length / 2);
+  const bytecode  = realCompiler?.realBytecode ?? fakeBytecode(contractName);
+  const byteLen   = Math.floor((bytecode.startsWith('0x') ? bytecode.slice(2) : bytecode).length / 2);
 
   html += `
   <div class="remix-compile-box remix-compile-box-ok">
@@ -1509,7 +1441,7 @@ function pgRender(out, result, elapsed, onDone) {
     </div>
     <div class="remix-abi-pre" id="remix-abi-pre" hidden>
       <code>${esc(JSON.stringify(
-        [
+        realCompiler?.realAbi ?? [
           ...functions.map(f => ({
             type: 'function',
             name: f.name,
@@ -1545,6 +1477,19 @@ function pgRender(out, result, elapsed, onDone) {
     </div>`;
   });
 
+  /* ── Generated Solidity (transpile output) ── */
+  if (realSolidity && !realBytecode) {
+    html += `
+    <div class="remix-compile-box remix-compile-box-ok" style="margin-top:12px">
+      <div class="remix-compile-box-title">
+        <span class="remix-icon-ok">✓</span>
+        <span class="remix-compile-name">Generated Solidity</span>
+        <button type="button" class="remix-copy-bytecode" id="remix-copy-sol" title="Copy Solidity">Copy .sol</button>
+      </div>
+      <pre class="remix-bytecode-pre remix-solidity-pre" id="remix-solidity-pre"><code>${esc(realSolidity)}</code></pre>
+    </div>`;
+  }
+
   /* ── Done ── */
   html += `
   <div class="remix-logline remix-logline-ok">
@@ -1554,6 +1499,15 @@ function pgRender(out, result, elapsed, onDone) {
   </div>`;
 
   out.innerHTML = html;
+
+  if (realSolidity) {
+    document.getElementById('remix-copy-sol')?.addEventListener('click', () => {
+      navigator.clipboard?.writeText(realSolidity).then(() => {
+        const b = document.getElementById('remix-copy-sol');
+        if (b) { const t = b.textContent; b.textContent = 'Copied'; setTimeout(() => { b.textContent = t; }, 1500); }
+      });
+    });
+  }
 
   const abiBtn = document.getElementById('remix-abi-toggle');
   const abiPre = document.getElementById('remix-abi-pre');
@@ -1589,12 +1543,9 @@ function initPlayground() {
   const lineCount   = document.getElementById('pg-line-count');
   const outputEl    = document.getElementById('pg-output');
   const statusSub   = document.getElementById('pg-output-status');
-  const sampleSel   = document.getElementById('pg-sample-select');
   const tabCompile   = document.getElementById('pg-tab-compile');
-  const tabConsole   = document.getElementById('pg-tab-console');
   const tabDeployed  = document.getElementById('pg-tab-deployed');
   const panelCompile = document.getElementById('pg-panel-compile');
-  const panelConsole = document.getElementById('pg-panel-console');
   const panelDeployed = document.getElementById('pg-panel-deployed');
   const deployedRoot = document.getElementById('pg-deployed-root');
   const deployBtn    = document.getElementById('pg-deploy-btn');
@@ -1603,27 +1554,46 @@ function initPlayground() {
   const consoleClear = document.getElementById('pg-console-clear');
   let consoleLineCount = 0;
   let lastCompileResult = null;
+  /** In-memory only (not localStorage). Simulates contract state for Storage + HelloWorld demos. */
   const deployRuntime = { storage: {}, greeting: 'Hello, Misoltav!' };
+  const DEPLOY_DEFAULT_GREETING = 'Hello, Misoltav!';
+
+  /** Parse initial greeting from contract source so Deployed panel matches editor. */
+  function parseInitialGreetingFromSource(source) {
+    if (!source || typeof source !== 'string') return DEPLOY_DEFAULT_GREETING;
+    const m = source.match(/greeting\s*=\s*["']([^"']*)["']/);
+    return m ? m[1] : DEPLOY_DEFAULT_GREETING;
+  }
+
+  /** Parse initial store value (e.g. val = 0) for Storage-style contracts. */
+  function parseInitialStorageFromSource(source) {
+    if (!source || typeof source !== 'string') return;
+    const m = source.match(/\bval\s*=\s*(\d+)/);
+    if (m) deployRuntime.storage._slot0 = m[1];
+  }
+
+  function resetDeployRuntime(source) {
+    deployRuntime.storage = {};
+    deployRuntime.greeting = parseInitialGreetingFromSource(source || '');
+    if (source) parseInitialStorageFromSource(source);
+  }
 
   function pgSwitchTab(which) {
+    // Two tabs: Compile (output + console) and Deployed (contracts only)
     if (tabCompile) {
       tabCompile.classList.toggle('active', which === 'compile');
       tabCompile.setAttribute('aria-selected', which === 'compile');
-    }
-    if (tabConsole) {
-      tabConsole.classList.toggle('active', which === 'console');
-      tabConsole.setAttribute('aria-selected', which === 'console');
     }
     if (tabDeployed) {
       tabDeployed.classList.toggle('active', which === 'deployed');
       tabDeployed.setAttribute('aria-selected', which === 'deployed');
     }
     if (panelCompile) panelCompile.hidden = which !== 'compile';
-    if (panelConsole) panelConsole.hidden = which !== 'console';
     if (panelDeployed) panelDeployed.hidden = which !== 'deployed';
   }
 
   function clearDeployedUI() {
+    resetDeployRuntime(null);
     if (!deployedRoot) return;
     deployedRoot.innerHTML = `<div class="pg-deployed-empty" id="pg-deployed-empty">
       <p><strong>Deployed Contracts</strong></p>
@@ -1631,8 +1601,9 @@ function initPlayground() {
     </div>`;
   }
 
-  function renderDeployedPanel(contractName, functions) {
+  function renderDeployedPanel(contractName, functions, sourceCode) {
     if (!deployedRoot) return;
+    resetDeployRuntime(sourceCode);
     const { full, short } = fakeDeployAddress(contractName);
     const upper = (contractName || 'Contract').toUpperCase();
     const fnRows = (functions || []).map((f) => {
@@ -1694,8 +1665,8 @@ function initPlayground() {
       block.querySelector('[data-action="exec"]')?.addEventListener('click', () => {
         const inputs = [...block.querySelectorAll('.remix-fn-input')].map((el) => el.value.trim());
         const n = (fnName || '').toLowerCase();
-        if ((n === 'store' || n === 'setgreeting') && inputs[0] !== '') {
-          if (n === 'store') deployRuntime.storage._slot0 = inputs[0];
+        if ((n === 'store' || n === 'set' || n === 'setgreeting') && inputs[0] !== '') {
+          if (n === 'store' || n === 'set') deployRuntime.storage._slot0 = inputs[0];
           else deployRuntime.greeting = inputs[0];
           if (outEl) outEl.textContent = '';
           pgConsoleAppend('pg-console-dim', `<span class="pg-console-ts">[tx]</span> ${esc(fnName)}(${esc(inputs[0])}) — transact ok`);
@@ -1740,13 +1711,12 @@ function initPlayground() {
   }
 
   if (tabCompile) tabCompile.addEventListener('click', () => pgSwitchTab('compile'));
-  if (tabConsole) tabConsole.addEventListener('click', () => pgSwitchTab('console'));
   if (tabDeployed) tabDeployed.addEventListener('click', () => pgSwitchTab('deployed'));
 
   if (deployBtn) {
     deployBtn.addEventListener('click', () => {
       if (!lastCompileResult || lastCompileResult.errors?.length || !lastCompileResult.contractName) return;
-      renderDeployedPanel(lastCompileResult.contractName, lastCompileResult.functions);
+      renderDeployedPanel(lastCompileResult.contractName, lastCompileResult.functions, editor ? editor.value : '');
       pgSwitchTab('deployed');
       const ts = new Date().toLocaleTimeString();
       pgConsoleAppend('pg-console-ok', `<span class="pg-console-ts">[${ts}]</span> <strong>deployment</strong> — ${esc(lastCompileResult.contractName)} @ ${fakeDeployAddress(lastCompileResult.contractName).short}`);
@@ -1761,13 +1731,14 @@ function initPlayground() {
     });
   }
 
-  if (!overlay || !openBtn) return;
+  if (!overlay) return;
 
-  // Open
+  const isStandalonePlayground = () => /^\/playground(\.html)?$/.test(window.location.pathname);
+
+  // Open — example files come from file explorer only
   function openPlayground() {
     overlay.hidden = false;
     document.body.style.overflow = 'hidden';
-    if (!editor.value) loadSample('token');
     setTimeout(() => editor.focus(), 60);
   }
 
@@ -1775,33 +1746,46 @@ function initPlayground() {
   function closePlayground() {
     overlay.hidden = true;
     document.body.style.overflow = '';
+    resetDeployRuntime(null);
   }
 
-  openBtn.addEventListener('click', openPlayground);
-  closeBtn.addEventListener('click', closePlayground);
-  overlay.addEventListener('click', e => { if (e.target === overlay) closePlayground(); });
+  if (openBtn) openBtn.addEventListener('click', openPlayground);
+  if (closeBtn) {
+    closeBtn.addEventListener('click', (e) => {
+      if (isStandalonePlayground()) {
+        e.preventDefault();
+        window.location.href = '/';
+      } else {
+        closePlayground();
+      }
+    });
+  }
+  overlay.addEventListener('click', (e) => {
+    if (e.target === overlay && !isStandalonePlayground()) closePlayground();
+  });
 
   // Keyboard shortcuts
   document.addEventListener('keydown', e => {
-    if (e.key === 'Escape' && !overlay.hidden) closePlayground();
+    if (e.key === 'Escape' && !overlay.hidden) {
+      if (isStandalonePlayground()) window.location.href = '/';
+      else closePlayground();
+    }
     if ((e.ctrlKey || e.metaKey) && e.key === 'Enter' && !overlay.hidden) { e.preventDefault(); runCompiler(); }
   });
 
-  // Load sample
+  // Load sample (used only when resetting output; examples come from file explorer)
   function loadSample(key) {
     const code = PG_SAMPLES[key] || '';
     editor.value = code;
     updateHighlight();
     updateStatusBar();
-    // reset output
-    outputEl.innerHTML = '<div class="pg-output-welcome"><div class="pg-welcome-icon">⬡</div><p>Press <strong>Run</strong> to compile this contract.</p></div>';
+    outputEl.innerHTML = '<div class="pg-output-welcome"><div class="pg-welcome-icon">⬡</div><p><strong>Try yourself:</strong> Write <code>.miso</code> code and press <strong>Run</strong> — real compiler runs in your browser.</p><p class="pg-welcome-hint">Open a file from the explorer or create a new one.</p></div>';
     statusSub.textContent = '— press Run to compile';
     lastCompileResult = null;
     if (deployBtn) { deployBtn.disabled = true; deployBtn.title = 'Compile first'; }
+    resetDeployRuntime(null);
     clearDeployedUI();
   }
-
-  sampleSel.addEventListener('change', () => loadSample(sampleSel.value));
 
   // Live highlighting
   function updateHighlight() {
@@ -1852,7 +1836,7 @@ function initPlayground() {
     }
   });
 
-  // Run compiler
+  // Run compiler: 1) in-browser real compiler if loaded, 2) else /api/compile (Node server), 3) else simulated
   function runCompiler() {
     const code = editor.value.trim();
     if (!code) {
@@ -1861,13 +1845,12 @@ function initPlayground() {
     }
     runBtn.classList.add('running');
     statusSub.textContent = '— compiling…';
-
-    // Simulate async compile delay
     const t0 = performance.now();
-    setTimeout(() => {
-      const result  = pgCompile(code);
+    pgSwitchTab('compile');
+
+    function finishWithSimulated() {
+      const result = pgCompile(code);
       const elapsed = Math.round(performance.now() - t0);
-      pgSwitchTab('compile');
       lastCompileResult = result;
       if (deployBtn) {
         deployBtn.disabled = result.errors.length > 0;
@@ -1889,10 +1872,485 @@ function initPlayground() {
       statusSub.textContent = result.errors.length
         ? `— ${result.errors.length} error${result.errors.length > 1 ? 's' : ''}`
         : `— compiled \u2713 · Deploy ready`;
-    }, 320 + Math.random() * 180);
+    }
+
+    function applyRealResult(data, errorMsg) {
+      const elapsed = Math.round(performance.now() - t0);
+      const result = pgCompile(code);
+      lastCompileResult = result;
+      if (deployBtn) {
+        deployBtn.disabled = result.errors.length > 0 || !!errorMsg;
+        deployBtn.title = result.errors.length ? 'Fix compile errors first' : (errorMsg ? 'Fix real compiler errors first' : 'Deploy to local VM (Remix-style)');
+      }
+      let realCompiler;
+      if (errorMsg) {
+        realCompiler = { realError: errorMsg };
+      } else if (data && typeof data === 'object' && data.bytecode) {
+        realCompiler = { realBytecode: data.bytecode, realAbi: data.abi, contractName: data.contractName };
+      } else if (typeof data === 'string') {
+        realCompiler = { realSolidity: data };
+      } else {
+        realCompiler = {};
+      }
+      pgRender(outputEl, result, elapsed, (info) => {
+        const ts = new Date().toLocaleTimeString();
+        if (!errorMsg && info.ok) {
+          const kind = realCompiler.realBytecode ? 'native (Misoltav → bytecode)' : 'transpile (→ Solidity)';
+          pgConsoleAppend('pg-console-ok', `<span class="pg-console-ts">[${ts}]</span> <strong>compile</strong> — ${esc(info.contractName)} ${kind} (${elapsed} ms)`);
+          info.functions.forEach((f) => pgConsoleAppend('pg-console-dim', `<span class="pg-console-ts">[${ts}]</span>   ${esc(f.name)}()`));
+          pgConsoleAppend('pg-console-dim', `<span class="pg-console-ts">[${ts}]</span> Press <strong>Deploy</strong> to simulate calls.${realCompiler.realBytecode ? ' Bytecode above is native Misoltav output.' : ' Copy Generated Solidity to deploy on chain.'}`);
+        } else if (errorMsg) {
+          pgConsoleAppend('pg-console-err', `<span class="pg-console-ts">[${ts}]</span> <strong>compile</strong> — ${esc(errorMsg)}`);
+        } else {
+          pgConsoleAppend('pg-console-err', `<span class="pg-console-ts">[${ts}]</span> <strong>compile failed</strong> — ${info.errors.length} error(s)`);
+        }
+      }, realCompiler);
+      runBtn.classList.remove('running');
+      statusSub.textContent = errorMsg ? '— compile error' : '— compiled \u2713 · Deploy ready';
+    }
+
+    // 1) In-browser compiler (native Misoltav → bytecode + ABI)
+    if (typeof window.MisoltavCompiler !== 'undefined' && window.MisoltavCompiler.compile) {
+      try {
+        const compileResult = window.MisoltavCompiler.compile(code);
+        applyRealResult(compileResult, null);
+      } catch (e) {
+        applyRealResult(null, e.message || String(e));
+      }
+      return;
+    }
+
+    // 2) Node server /api/compile (must return { ok, bytecode, abi, contractName } or { ok, solidity } for legacy)
+    fetch('/api/compile', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ code }),
+    }).then((res) => res.json()).then((body) => {
+      if (body.ok) {
+        if (body.bytecode != null) applyRealResult({ bytecode: body.bytecode, abi: body.abi, contractName: body.contractName }, null);
+        else applyRealResult(body.solidity ?? null, null);
+      } else {
+        applyRealResult(null, body.error || 'Unknown error');
+      }
+    }).catch(() => {
+      finishWithSimulated();
+    });
   }
 
   runBtn.addEventListener('click', runCompiler);
+
+  // ═══ Console pane: resizable via drag handle ═══
+  const consolePane = document.getElementById('pg-console-pane');
+  const consoleResizeHandle = document.getElementById('pg-console-resize-handle');
+  if (consolePane && consoleResizeHandle) {
+    const MIN_HEIGHT = 120;
+    const MAX_HEIGHT_RATIO = 0.8;
+    consoleResizeHandle.addEventListener('mousedown', (e) => {
+      if (e.button !== 0) return;
+      e.preventDefault();
+      const modal = overlay?.querySelector('.pg-modal') || consolePane.closest('.pg-modal');
+      const onMove = (moveEvent) => {
+        if (!modal) return;
+        const rect = modal.getBoundingClientRect();
+        const bottom = rect.bottom;
+        const y = moveEvent.clientY;
+        let h = Math.round(bottom - y);
+        const maxH = Math.max(MIN_HEIGHT, rect.height * MAX_HEIGHT_RATIO);
+        h = Math.min(maxH, Math.max(MIN_HEIGHT, h));
+        consolePane.style.height = h + 'px';
+      };
+      const onUp = () => {
+        document.removeEventListener('mousemove', onMove);
+        document.removeEventListener('mouseup', onUp);
+        document.body.style.cursor = '';
+        document.body.style.userSelect = '';
+      };
+      document.body.style.cursor = 'row-resize';
+      document.body.style.userSelect = 'none';
+      document.addEventListener('mousemove', onMove);
+      document.addEventListener('mouseup', onUp);
+    });
+  }
+
+  // ═══ File Explorer (real IDE-style .miso files and folders) ═══
+  const feTree = document.getElementById('pg-fe-tree');
+  const feCreateBtn = document.getElementById('pg-fe-create-btn');
+  const feCreateDropdown = document.getElementById('pg-fe-create-dropdown');
+  const FE_STORAGE_KEY = 'pg-file-tree';
+
+  if (feTree && editor) {
+    let fileTree = [];
+    let currentFileId = null;
+    let selectedFolderId = null;
+
+    function uid() {
+      return 'id-' + Date.now().toString(36) + '-' + Math.random().toString(36).slice(2, 9);
+    }
+
+    function getNodeById(root, id) {
+      if (!root) return null;
+      if (Array.isArray(root)) {
+        for (const n of root) {
+          const found = getNodeById(n, id);
+          if (found) return found;
+        }
+        return null;
+      }
+      if (root.id === id) return root;
+      if (root.children && root.children.length) {
+        for (const c of root.children) {
+          const found = getNodeById(c, id);
+          if (found) return found;
+        }
+      }
+      return null;
+    }
+
+    function findNodeBySampleKey(sampleKey) {
+      function find(arr) {
+        for (const n of arr) {
+          if (n.sampleKey === sampleKey) return n;
+          if (n.children && n.children.length) {
+            const found = find(n.children);
+            if (found) return found;
+          }
+        }
+        return null;
+      }
+      return find(fileTree);
+    }
+
+    function hasFileWithName(arr, name) {
+      const lower = (name || '').toLowerCase();
+      for (const n of arr) {
+        if (n.type === 'file' && (n.name || '').toLowerCase() === lower) return true;
+        if (n.children && n.children.length && hasFileWithName(n.children, name)) return true;
+      }
+      return false;
+    }
+
+    function getFirstFile(arr) {
+      for (const n of arr) {
+        if (n.type === 'file') return n;
+        if (n.children && n.children.length) {
+          const f = getFirstFile(n.children);
+          if (f) return f;
+        }
+      }
+      return null;
+    }
+
+    function persist() {
+      try {
+        localStorage.setItem(FE_STORAGE_KEY, JSON.stringify(fileTree));
+      } catch (_) {}
+    }
+
+    function loadFromStorage() {
+      try {
+        const raw = localStorage.getItem(FE_STORAGE_KEY);
+        if (raw) {
+          const parsed = JSON.parse(raw);
+          if (Array.isArray(parsed)) fileTree = parsed;
+        }
+      } catch (_) {}
+    }
+
+    function saveCurrentFile() {
+      if (!currentFileId) return;
+      const node = getNodeById(fileTree, currentFileId);
+      if (node && node.type === 'file') {
+        node.content = editor.value;
+        persist();
+      }
+    }
+
+    function openFile(node) {
+      if (node.type !== 'file') return;
+      saveCurrentFile();
+      currentFileId = node.id;
+      editor.value = node.content != null ? node.content : '';
+      updateHighlight();
+      updateLineNumbers();
+      updateStatusBar();
+      renderTree();
+    }
+
+    function fileIconClass(name) {
+      if (/\.miso$/i.test(name)) return 'miso';
+      if (/\.json$/i.test(name)) return 'json';
+      return 'generic';
+    }
+
+    function removeNodeFromTree(targetId) {
+      function removeFrom(arr) {
+        const idx = arr.findIndex((n) => n.id === targetId);
+        if (idx !== -1) {
+          arr.splice(idx, 1);
+          return true;
+        }
+        for (const n of arr) {
+          if (n.children && removeFrom(n.children)) return true;
+        }
+        return false;
+      }
+      removeFrom(fileTree);
+      persist();
+    }
+
+    function renameNode(node, newName) {
+      const name = (newName || '').trim();
+      if (!name) return;
+      node.name = node.type === 'file' && !/\.miso$/i.test(name) ? name + '.miso' : name;
+      persist();
+      renderTree();
+    }
+
+    function deleteNode(node) {
+      if (node.type === 'file' && currentFileId === node.id) {
+        currentFileId = null;
+        editor.value = '';
+        updateHighlight();
+        updateLineNumbers();
+        updateStatusBar();
+      }
+      removeNodeFromTree(node.id);
+      renderTree();
+    }
+
+    function showNodeMenu(e, node, menuBtn) {
+      e.stopPropagation();
+      e.preventDefault();
+      const existing = document.getElementById('pg-fe-node-menu');
+      if (existing) existing.remove();
+      const menu = document.createElement('div');
+      menu.id = 'pg-fe-node-menu';
+      menu.className = 'pg-fe-node-menu';
+      menu.setAttribute('role', 'menu');
+      const rect = menuBtn.getBoundingClientRect();
+      menu.innerHTML = `
+        <button type="button" class="pg-fe-menu-item" data-action="rename" role="menuitem">Rename</button>
+        <button type="button" class="pg-fe-menu-item" data-action="delete" role="menuitem">${node.type === 'folder' ? 'Delete folder' : 'Delete'}</button>`;
+      document.body.appendChild(menu);
+      menu.style.left = rect.right - 4 + 'px';
+      menu.style.top = rect.top + 'px';
+      const closeMenu = () => {
+        menu.remove();
+        document.removeEventListener('click', closeMenu);
+      };
+      requestAnimationFrame(() => document.addEventListener('click', closeMenu));
+      menu.querySelector('[data-action="rename"]').addEventListener('click', (e) => {
+        e.stopPropagation();
+        closeMenu();
+        const current = node.type === 'file' ? node.name : node.name;
+        const name = window.prompt(node.type === 'folder' ? 'Folder name:' : 'File name:', current);
+        if (name != null) renameNode(node, name);
+      });
+      menu.querySelector('[data-action="delete"]').addEventListener('click', (e) => {
+        e.stopPropagation();
+        closeMenu();
+        const msg = node.type === 'folder'
+          ? `Delete folder "${node.name}" and its contents?`
+          : `Delete "${node.name}"?`;
+        if (window.confirm(msg)) deleteNode(node);
+      });
+    }
+
+    function renderNode(node, depth) {
+      const depthClass = 'pg-fe-node-depth-' + Math.min(depth, 5);
+      if (node.type === 'folder') {
+        const expanded = node.expanded !== false;
+        const row = document.createElement('div');
+        row.className = 'pg-fe-node folder' + (expanded ? '' : ' collapsed') + ' ' + depthClass;
+        row.setAttribute('data-id', node.id);
+        row.setAttribute('role', 'treeitem');
+        row.setAttribute('aria-expanded', expanded);
+        row.innerHTML = `
+          <span class="pg-fe-chevron-node">▼</span>
+          <span class="pg-fe-icon pg-fe-icon-folder${expanded ? '' : ' collapsed'}"></span>
+          <span class="pg-fe-node-label">${esc(node.name)}</span>
+          <button type="button" class="pg-fe-menu-btn" aria-label="Actions for ${esc(node.name)}" title="Rename or delete">⋮</button>`;
+        const menuBtn = row.querySelector('.pg-fe-menu-btn');
+        row.addEventListener('click', (e) => {
+          if (e.target.closest('.pg-fe-menu-btn')) return;
+          e.stopPropagation();
+          selectedFolderId = node.id;
+          node.expanded = !node.expanded;
+          renderTree();
+        });
+        menuBtn.addEventListener('click', (e) => showNodeMenu(e, node, menuBtn));
+        feTree.appendChild(row);
+        if (expanded && node.children && node.children.length) {
+          node.children.forEach((child) => renderNode(child, depth + 1));
+        }
+        return;
+      }
+      const row = document.createElement('div');
+      row.className = 'pg-fe-node file ' + depthClass + (currentFileId === node.id ? ' active' : '');
+      row.setAttribute('data-id', node.id);
+      row.setAttribute('role', 'treeitem');
+      const iconClass = fileIconClass(node.name);
+      row.innerHTML = `
+        <span class="pg-fe-spacer"></span>
+        <span class="pg-fe-icon-file ${iconClass}"></span>
+        <span class="pg-fe-node-label">${esc(node.name)}</span>
+        <button type="button" class="pg-fe-menu-btn" aria-label="Actions for ${esc(node.name)}" title="Rename or delete">⋮</button>`;
+      const menuBtn = row.querySelector('.pg-fe-menu-btn');
+      row.addEventListener('click', (e) => {
+        if (e.target.closest('.pg-fe-menu-btn')) return;
+        e.stopPropagation();
+        openFile(node);
+      });
+      menuBtn.addEventListener('click', (e) => showNodeMenu(e, node, menuBtn));
+      feTree.appendChild(row);
+    }
+
+    function renderTree() {
+      feTree.innerHTML = '';
+      if (!fileTree.length) {
+        feTree.innerHTML = '<div class="pg-fe-empty">No files — use + Create</div>';
+        return;
+      }
+      fileTree.forEach((node) => renderNode(node, 0));
+    }
+
+    function addNode(node, parentId) {
+      if (parentId != null) {
+        const parent = getNodeById(fileTree, parentId);
+        if (parent && parent.type === 'folder') {
+          if (!parent.children) parent.children = [];
+          parent.children.push(node);
+          parent.expanded = true;
+        } else {
+          fileTree.push(node);
+        }
+      } else {
+        fileTree.push(node);
+      }
+      persist();
+      renderTree();
+    }
+
+    function createFile(name) {
+      const base = (name || '').trim() || 'Untitled.miso';
+      const fileName = base.endsWith('.miso') ? base : base + '.miso';
+      const node = { id: uid(), name: fileName, type: 'file', content: '' };
+      addNode(node, selectedFolderId);
+      openFile(node);
+    }
+
+    function createFolder(name) {
+      const folderName = (name || '').trim() || 'New folder';
+      const node = { id: uid(), name: folderName, type: 'folder', children: [], expanded: true };
+      addNode(node, selectedFolderId);
+      renderTree();
+    }
+
+    const DEFAULT_EXAMPLES = [
+      { name: 'HelloWorld.miso', sampleKey: 'hello' },
+      { name: 'Storage.miso', sampleKey: 'storage' },
+      { name: 'Token.miso', sampleKey: 'token' },
+    ];
+
+    const REMOVED_EXAMPLE_NAMES = ['Write.miso', 'ControlFlow.miso', 'SimpleGet.miso'];
+
+    function removeNodesByName(arr, names) {
+      const set = new Set(names.map((n) => n.toLowerCase()));
+      for (let i = arr.length - 1; i >= 0; i--) {
+        const n = arr[i];
+        if (n.type === 'file' && set.has((n.name || '').toLowerCase())) {
+          arr.splice(i, 1);
+          continue;
+        }
+        if (n.children && n.children.length) removeNodesByName(n.children, names);
+      }
+    }
+
+    loadFromStorage();
+    removeNodesByName(fileTree, REMOVED_EXAMPLE_NAMES);
+    const current = currentFileId ? getNodeById(fileTree, currentFileId) : null;
+    const removedCurrent = !current && currentFileId;
+    if (removedCurrent) {
+      currentFileId = null;
+      editor.value = '';
+      updateHighlight();
+      updateLineNumbers();
+      updateStatusBar();
+    }
+    persist();
+
+    if (typeof PG_SAMPLES !== 'undefined') {
+      if (!fileTree.length) {
+        fileTree = DEFAULT_EXAMPLES.map((e) => ({
+          id: uid(),
+          name: e.name,
+          type: 'file',
+          content: PG_SAMPLES[e.sampleKey] || '',
+          sampleKey: e.sampleKey,
+        }));
+        persist();
+      } else {
+        // Ensure any missing default examples are added (e.g. after we add new samples)
+        let added = false;
+        for (const e of DEFAULT_EXAMPLES) {
+          if (!hasFileWithName(fileTree, e.name)) {
+            fileTree.push({
+              id: uid(),
+              name: e.name,
+              type: 'file',
+              content: PG_SAMPLES[e.sampleKey] || '',
+              sampleKey: e.sampleKey,
+            });
+            added = true;
+          }
+        }
+        if (added) persist();
+      }
+      // If no file is open or current file was deleted, open the first file
+      const current = currentFileId ? getNodeById(fileTree, currentFileId) : null;
+      if (!current) {
+        const first = getFirstFile(fileTree);
+        if (first) openFile(first);
+      }
+    }
+    renderTree();
+
+    if (feCreateBtn && feCreateDropdown) {
+      feCreateBtn.addEventListener('click', (e) => {
+        e.stopPropagation();
+        const open = feCreateDropdown.hidden;
+        feCreateDropdown.hidden = !open;
+        feCreateBtn.setAttribute('aria-expanded', !open);
+      });
+      feCreateDropdown.querySelectorAll('.pg-fe-dropdown-item').forEach((btn) => {
+        btn.addEventListener('click', (e) => {
+          e.stopPropagation();
+          feCreateDropdown.hidden = true;
+          feCreateBtn.setAttribute('aria-expanded', 'false');
+          const kind = btn.getAttribute('data-create');
+          if (kind === 'file') {
+            const name = window.prompt('File name (e.g. Contract.miso):', 'Untitled.miso');
+            if (name != null) createFile(name);
+          } else if (kind === 'folder') {
+            const name = window.prompt('Folder name:', 'New folder');
+            if (name != null) createFolder(name);
+          }
+        });
+      });
+      document.addEventListener('click', () => {
+        feCreateDropdown.hidden = true;
+        feCreateBtn.setAttribute('aria-expanded', 'false');
+      });
+    }
+
+    editor.addEventListener('input', () => {
+      if (currentFileId) {
+        const node = getNodeById(fileTree, currentFileId);
+        if (node && node.type === 'file') node.content = editor.value;
+      }
+    });
+    window.addEventListener('beforeunload', () => saveCurrentFile());
+  }
 
   // Also wire hero buttons
   document.getElementById('hero-explore-btn')?.addEventListener('click', openPlayground);

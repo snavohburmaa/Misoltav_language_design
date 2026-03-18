@@ -1,0 +1,14 @@
+-- std/Ownable.miso
+-- Minimal ownership pattern: set owner at deploy, enforce only owner in functions.
+-- Use: copy into your project or import; contracts can do "contract MyContract is Ownable" after defining Ownable.
+
+contract Ownable:
+    owner = sender
+
+    function setOwner(newOwner):
+        only owner
+        owner = newOwner
+
+    function renounceOwnership():
+        only owner
+        owner = 0x0000000000000000000000000000000000000000

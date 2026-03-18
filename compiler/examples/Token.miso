@@ -1,0 +1,40 @@
+contract Token
+    owner   = sender
+    name    = "MisoToken"
+    symbol  = "MISO"
+    supply  = 0
+
+    balance[address]
+    allowance[address][address]
+
+    event Transfer(from, to, amount)
+    event Approval(owner, spender, amount)
+
+    function mint(user, amount):
+        only owner
+        balance[user] += amount
+        supply += amount
+        emit Transfer(from: self, to: user, amount: amount)
+
+    function transfer(to, amount):
+        require balance[sender] >= amount
+        balance[sender] -= amount
+        balance[to] += amount
+        emit Transfer(from: sender, to: to, amount: amount)
+
+    function approve(spender, amount):
+        allowance[sender][spender] = amount
+        emit Approval(owner: sender, spender: spender, amount: amount)
+
+    function transferFrom(from, to, amount):
+        require allowance[from][sender] >= amount
+        require balance[from] >= amount
+        allowance[from][sender] -= amount
+        balance[from] -= amount
+        balance[to] += amount
+        emit Transfer(from: from, to: to, amount: amount)
+
+    function burn(amount):
+        require balance[sender] >= amount
+        balance[sender] -= amount
+        supply -= amount

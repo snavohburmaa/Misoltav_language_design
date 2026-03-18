@@ -1,0 +1,18 @@
+{
+  "comments": {
+    "lineComment": "--"
+  },
+  "brackets": [
+    ["(", ")"],
+    ["[", "]"]
+  ],
+  "autoClosingPairs": [
+    { "open": "(", "close": ")" },
+    { "open": "[", "close": "]" },
+    { "open": "\"", "close": "\"" }
+  ],
+  "indentationRules": {
+    "increaseIndentPattern": "^\\s*(contract|interface|function|struct|enum|event|error|if|elif|else|match|for|while|receive|fallback)\\b.*:\\s*$",
+    "decreaseIndentPattern": "^\\s*$"
+  }
+}

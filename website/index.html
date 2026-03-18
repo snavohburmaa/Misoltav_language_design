@@ -30,8 +30,9 @@
         <li><a href="#architecture" id="nav-arch">Architecture</a></li>
         <li><a href="#usecases"  id="nav-use">Use Cases</a></li>
         <li><a href="#roadmap"   id="nav-road">Roadmap</a></li>
+        <li><a href="#developers" id="nav-developers">Developers</a></li>
       </ul>
-      <button class="nav-cta" id="nav-cta-btn" aria-haspopup="dialog">Try it →</button>
+      <a href="/playground" class="nav-cta" id="nav-cta-btn">Try it →</a>
       <button class="hamburger" id="hamburger" aria-label="Toggle menu" aria-expanded="false">
         <span></span><span></span><span></span>
       </button>
@@ -728,14 +729,11 @@
     <div class="container">
       <div class="section-badge">Examples</div>
       <h2 class="section-title">Real Contracts, Real Simple</h2>
-      <p class="section-sub">Six production-ready contract patterns written in Misoltav.</p>
+      <p class="section-sub">Three contract patterns written in Misoltav.</p>
       <div class="examples-selector" id="examples-selector" role="tablist">
         <button class="ex-tab active" data-ex="0" id="ex-tab-0" role="tab">Token</button>
         <button class="ex-tab" data-ex="1" id="ex-tab-1" role="tab">Voting</button>
-        <button class="ex-tab" data-ex="2" id="ex-tab-2" role="tab">Crowdfunding</button>
-        <button class="ex-tab" data-ex="3" id="ex-tab-3" role="tab">NFT</button>
-        <button class="ex-tab" data-ex="4" id="ex-tab-4" role="tab">Escrow</button>
-        <button class="ex-tab" data-ex="5" id="ex-tab-5" role="tab">Hello World</button>
+        <button class="ex-tab" data-ex="2" id="ex-tab-2" role="tab">Hello World</button>
       </div>
       <div class="example-display">
         <div class="code-window big">
@@ -925,15 +923,32 @@
       <p class="section-sub">Ten phases from specification to a full browser-based playground.</p>
       <div class="roadmap-track" id="roadmap-track">
         <div class="rm-item done"   id="rm-1"><div class="rm-dot" aria-hidden="true"></div><div class="rm-content"><span class="rm-phase">Phase 1</span><strong>Language Specification</strong><span class="rm-tag done-tag"><svg class="rm-check" viewBox="0 0 24 24" aria-hidden="true"><path d="M20 6L9 17l-5-5" stroke-linecap="round" stroke-linejoin="round"/></svg>Complete</span></div></div>
-        <div class="rm-item"       id="rm-2"><div class="rm-dot"></div><div class="rm-content"><span class="rm-phase">Phase 2</span><strong>Lexer + Parser (Rust)</strong><span class="rm-tag">Planned</span></div></div>
-        <div class="rm-item"       id="rm-3"><div class="rm-dot"></div><div class="rm-content"><span class="rm-phase">Phase 3</span><strong>Type Inference Engine</strong><span class="rm-tag">Planned</span></div></div>
-        <div class="rm-item"       id="rm-4"><div class="rm-dot"></div><div class="rm-content"><span class="rm-phase">Phase 4</span><strong>Safety Pass (only / lock / payable)</strong><span class="rm-tag">Planned</span></div></div>
-        <div class="rm-item"       id="rm-5"><div class="rm-dot"></div><div class="rm-content"><span class="rm-phase">Phase 5</span><strong>EVM Bytecode Backend</strong><span class="rm-tag">Planned</span></div></div>
-        <div class="rm-item"       id="rm-6"><div class="rm-dot"></div><div class="rm-content"><span class="rm-phase">Phase 6</span><strong>Standard Library (std.tokens · std.access)</strong><span class="rm-tag">Planned</span></div></div>
-        <div class="rm-item"       id="rm-7"><div class="rm-dot"></div><div class="rm-content"><span class="rm-phase">Phase 7</span><strong>Test Framework (misolc test)</strong><span class="rm-tag">Planned</span></div></div>
-        <div class="rm-item"       id="rm-8"><div class="rm-dot"></div><div class="rm-content"><span class="rm-phase">Phase 8</span><strong>LSP Server — IDE Autocomplete</strong><span class="rm-tag">Planned</span></div></div>
-        <div class="rm-item"       id="rm-9"><div class="rm-dot"></div><div class="rm-content"><span class="rm-phase">Phase 9</span><strong>WASM Backend (non-EVM chains)</strong><span class="rm-tag">Planned</span></div></div>
-        <div class="rm-item"       id="rm-10"><div class="rm-dot"></div><div class="rm-content"><span class="rm-phase">Phase 10</span><strong>Browser Playground IDE</strong><span class="rm-tag">Planned</span></div></div>
+        <div class="rm-item done" id="rm-2"><div class="rm-dot" aria-hidden="true"></div><div class="rm-content"><span class="rm-phase">Phase 2</span><strong>Lexer + Parser</strong><span class="rm-tag done-tag"><svg class="rm-check" viewBox="0 0 24 24" aria-hidden="true"><path d="M20 6L9 17l-5-5" stroke-linecap="round" stroke-linejoin="round"/></svg>Complete</span></div></div>
+        <div class="rm-item done" id="rm-3"><div class="rm-dot" aria-hidden="true"></div><div class="rm-content"><span class="rm-phase">Phase 3</span><strong>Type Inference Engine</strong><span class="rm-tag done-tag"><svg class="rm-check" viewBox="0 0 24 24" aria-hidden="true"><path d="M20 6L9 17l-5-5" stroke-linecap="round" stroke-linejoin="round"/></svg>Complete</span></div></div>
+        <div class="rm-item done" id="rm-4"><div class="rm-dot" aria-hidden="true"></div><div class="rm-content"><span class="rm-phase">Phase 4</span><strong>Safety Pass (only / lock / payable)</strong><span class="rm-tag done-tag"><svg class="rm-check" viewBox="0 0 24 24" aria-hidden="true"><path d="M20 6L9 17l-5-5" stroke-linecap="round" stroke-linejoin="round"/></svg>Complete</span></div></div>
+        <div class="rm-item done" id="rm-5"><div class="rm-dot" aria-hidden="true"></div><div class="rm-content"><span class="rm-phase">Phase 5</span><strong>EVM Bytecode Backend</strong><span class="rm-tag done-tag"><svg class="rm-check" viewBox="0 0 24 24" aria-hidden="true"><path d="M20 6L9 17l-5-5" stroke-linecap="round" stroke-linejoin="round"/></svg>Complete</span></div></div>
+        <div class="rm-item done" id="rm-6"><div class="rm-dot" aria-hidden="true"></div><div class="rm-content"><span class="rm-phase">Phase 6</span><strong>Standard Library (std.tokens · std.access)</strong><span class="rm-tag done-tag"><svg class="rm-check" viewBox="0 0 24 24" aria-hidden="true"><path d="M20 6L9 17l-5-5" stroke-linecap="round" stroke-linejoin="round"/></svg>Complete</span></div></div>
+        <div class="rm-item done" id="rm-7"><div class="rm-dot" aria-hidden="true"></div><div class="rm-content"><span class="rm-phase">Phase 7</span><strong>Test Framework (misolc test)</strong><span class="rm-tag done-tag"><svg class="rm-check" viewBox="0 0 24 24" aria-hidden="true"><path d="M20 6L9 17l-5-5" stroke-linecap="round" stroke-linejoin="round"/></svg>Complete</span></div></div>
+        <div class="rm-item done" id="rm-8"><div class="rm-dot" aria-hidden="true"></div><div class="rm-content"><span class="rm-phase">Phase 8</span><strong>LSP Server — IDE Autocomplete</strong><span class="rm-tag done-tag"><svg class="rm-check" viewBox="0 0 24 24" aria-hidden="true"><path d="M20 6L9 17l-5-5" stroke-linecap="round" stroke-linejoin="round"/></svg>Complete</span></div></div>
+        <div class="rm-item done" id="rm-9"><div class="rm-dot" aria-hidden="true"></div><div class="rm-content"><span class="rm-phase">Phase 9</span><strong>WASM Backend (non-EVM chains)</strong><span class="rm-tag done-tag"><svg class="rm-check" viewBox="0 0 24 24" aria-hidden="true"><path d="M20 6L9 17l-5-5" stroke-linecap="round" stroke-linejoin="round"/></svg>Complete</span></div></div>
+        <div class="rm-item done" id="rm-10"><div class="rm-dot" aria-hidden="true"></div><div class="rm-content"><span class="rm-phase">Phase 10</span><strong>Browser Playground IDE</strong><span class="rm-tag done-tag"><svg class="rm-check" viewBox="0 0 24 24" aria-hidden="true"><path d="M20 6L9 17l-5-5" stroke-linecap="round" stroke-linejoin="round"/></svg>Complete</span></div></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ──────────────── DEVELOPERS ──────────────── -->
+  <section id="developers" aria-label="Developers">
+    <div class="container">
+      <div class="section-badge">Team</div>
+      <h2 class="section-title">Who Developed This</h2>
+      <p class="section-sub">Misoltav language specification and website by the following developers.</p>
+      <div class="developers-grid">
+        <div class="dev-card"><span class="dev-name">Khant Wai Yan Aung</span><span class="dev-id">6703712</span></div>
+        <div class="dev-card"><span class="dev-name">Kaung San Thu</span><span class="dev-id">6703124</span></div>
+        <div class="dev-card"><span class="dev-name">Aung Myo Min</span><span class="dev-id">6704508</span></div>
+        <div class="dev-card"><span class="dev-name">Eaint Cherry Kyaw</span><span class="dev-id">6703488</span></div>
+        <div class="dev-card"><span class="dev-name">Nang May Phoo Thaw</span><span class="dev-id">6704622</span></div>
+        <div class="dev-card"><span class="dev-name">Kaung Khant Phyo</span><span class="dev-id">6703473</span></div>
       </div>
     </div>
   </section>
@@ -960,6 +975,7 @@
           <h4>Project</h4>
           <a href="#usecases">Use Cases</a>
           <a href="#roadmap">Roadmap</a>
+          <a href="#developers">Developers</a>
         </div>
       </div>
       <div class="footer-bottom">
@@ -980,39 +996,57 @@
           <span class="pg-badge">v2.0</span>
         </div>
         <div class="pg-header-actions">
-          <select class="pg-select" id="pg-sample-select" aria-label="Load sample contract">
-            <option value="hello">Hello World</option>
-            <option value="storage">Storage</option>
-          </select>
           <button class="pg-btn pg-btn-run" id="pg-run-btn" aria-label="Compile and check">
             <span class="pg-run-icon">▶</span> Run
           </button>
           <button class="pg-btn pg-btn-deploy" id="pg-deploy-btn" aria-label="Deploy to local VM" disabled title="Compile first">
             Deploy
           </button>
-          <button class="pg-btn pg-btn-close" id="pg-close-btn" aria-label="Close playground">✕</button>
+          <button type="button" class="pg-btn pg-btn-back" id="pg-close-btn" aria-label="Back to home"><span class="pg-back-icon" aria-hidden="true">←</span> Back</button>
         </div>
       </div>
 
       <!-- Split pane -->
       <div class="pg-body">
 
+        <!-- File Explorer sidebar -->
+        <aside class="pg-file-explorer" id="pg-file-explorer">
+          <div class="pg-fe-header">
+            <span class="pg-fe-title">FILE EXPLORER</span>
+          </div>
+          <div class="pg-fe-create-wrap">
+            <button type="button" class="pg-fe-create-btn" id="pg-fe-create-btn" aria-haspopup="true" aria-expanded="false" aria-label="Create file or folder">
+              <span>+ Create</span>
+              <span class="pg-fe-create-caret">▾</span>
+            </button>
+            <div class="pg-fe-create-dropdown" id="pg-fe-create-dropdown" hidden>
+              <button type="button" class="pg-fe-dropdown-item" data-create="file">New File</button>
+              <button type="button" class="pg-fe-dropdown-item" data-create="folder">New Folder</button>
+            </div>
+          </div>
+          <div class="pg-fe-tree" id="pg-fe-tree" role="tree" aria-label="Project files">
+            <!-- Filled by JS -->
+          </div>
+        </aside>
+
         <!-- Editor pane -->
         <div class="pg-editor-pane">
           <div class="pg-pane-label">Editor <span class="pg-pane-sub">— type your Misoltav contract</span></div>
           <div class="pg-editor-wrap">
             <div class="pg-line-nums" id="pg-line-nums" aria-hidden="true"></div>
-            <textarea
-              id="pg-editor"
-              class="pg-editor"
-              spellcheck="false"
-              autocorrect="off"
-              autocapitalize="off"
-              autocomplete="off"
-              aria-label="Misoltav code editor"
-              placeholder="Write your contract here…"
-            ></textarea>
-            <pre class="pg-highlight-layer" id="pg-highlight" aria-hidden="true"><code></code></pre>
+            <div class="pg-editor-code">
+              <pre class="pg-highlight-layer" id="pg-highlight" aria-hidden="true"><code></code></pre>
+              <textarea
+                id="pg-editor"
+                class="pg-editor"
+                spellcheck="false"
+                autocorrect="off"
+                autocapitalize="off"
+                autocomplete="off"
+                aria-label="Misoltav code editor"
+                placeholder="Write your contract here…"
+              ></textarea>
+            </div>
           </div>
         </div>
 
@@ -1024,10 +1058,6 @@
             <button class="pg-out-tab active" id="pg-tab-compile" data-tab="compile" aria-selected="true">
               <span class="pg-out-tab-dot pg-out-tab-dot-compile"></span>Compile
             </button>
-            <button class="pg-out-tab" id="pg-tab-console" data-tab="console" aria-selected="false">
-              <span class="pg-out-tab-dot pg-out-tab-dot-console"></span>Console
-              <span class="pg-console-badge" id="pg-console-badge" hidden>0</span>
-            </button>
             <button class="pg-out-tab" id="pg-tab-deployed" data-tab="deployed" aria-selected="false">
               <span class="pg-out-tab-dot pg-out-tab-dot-deploy"></span>Deployed
             </button>
@@ -1035,39 +1065,18 @@
             <span id="pg-output-status" class="pg-out-status">— press Run to compile</span>
           </div>
 
-          <!-- Compile panel -->
+          <!-- Compile tab: compile output only -->
           <div class="pg-out-panel" id="pg-panel-compile">
             <div class="pg-output" id="pg-output">
               <div class="pg-output-welcome">
                 <div class="pg-welcome-icon">⬡</div>
-                <p>Write a contract and press <strong>Run</strong> to see the compiler output.</p>
-                <p class="pg-welcome-hint">Choose a sample from the dropdown to get started quickly.</p>
+                <p><strong>Try yourself:</strong> Write <code>.miso</code> code in the editor and press <strong>Run</strong>. The real compiler runs here and shows bytecode + ABI.</p>
+                <p class="pg-welcome-hint">Open a file from the explorer or create a new one.</p>
               </div>
             </div>
           </div>
 
-          <!-- Console panel -->
-          <div class="pg-out-panel" id="pg-panel-console" hidden>
-            <div class="pg-console-toolbar">
-              <span class="pg-console-label">› Misoltav Runtime Console</span>
-              <button class="pg-console-clear" id="pg-console-clear" title="Clear console">⌫ Clear</button>
-            </div>
-            <div class="pg-console-body" id="pg-console-body">
-              <div class="pg-console-hint">Console output will appear here after ▶ Run.</div>
-            </div>
-            <div class="pg-console-input-row">
-              <span class="pg-console-prompt">&gt;</span>
-              <input
-                type="text"
-                id="pg-console-input"
-                class="pg-console-input"
-                placeholder="Type an expression… (e.g. balance[sender])"
-                autocomplete="off" spellcheck="false"
-              />
-            </div>
-          </div>
-
-          <!-- Remix-style Deployed Contracts -->
+          <!-- Deployed tab: only deployed contracts -->
           <div class="pg-out-panel" id="pg-panel-deployed" hidden>
             <div class="pg-deployed-scroll" id="pg-deployed-root">
               <div class="pg-deployed-empty" id="pg-deployed-empty">
@@ -1082,6 +1091,29 @@
 
       </div><!-- /pg-body -->
 
+      <!-- Console output: full-width bottom pane (VS Code style), resizable -->
+      <div class="pg-console-pane" id="pg-console-pane">
+        <div class="pg-console-resize-handle" id="pg-console-resize-handle" title="Drag to resize"></div>
+        <div class="pg-console-toolbar">
+          <span class="pg-console-label">› Misoltav Runtime Console</span>
+          <button class="pg-console-clear" id="pg-console-clear" title="Clear console">⌫ Clear</button>
+          <span class="pg-console-badge" id="pg-console-badge" hidden>0</span>
+        </div>
+        <div class="pg-console-body" id="pg-console-body">
+          <div class="pg-console-hint">Console output will appear here after ▶ Run.</div>
+        </div>
+        <div class="pg-console-input-row">
+          <span class="pg-console-prompt">&gt;</span>
+          <input
+            type="text"
+            id="pg-console-input"
+            class="pg-console-input"
+            placeholder="Type an expression… (e.g. balance[sender])"
+            autocomplete="off" spellcheck="false"
+          />
+        </div>
+      </div>
+
       <!-- Status bar -->
       <div class="pg-statusbar">
         <span id="pg-char-count">0 chars</span>
@@ -1094,6 +1126,8 @@
 
   <!-- Three.js via CDN -->
   <script src="https://cdn.jsdelivr.net/npm/three@0.161.0/build/three.min.js"></script>
+  <!-- Real Misoltav compiler (run npm run build:compiler from project root to generate) -->
+  <script src="compiler-browser.js"></script>
   <script src="app.js"></script>
 </body>
 </html>

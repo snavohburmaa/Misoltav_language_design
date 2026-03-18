@@ -1,0 +1,21 @@
+contract ControlFlow:
+    enum State:
+        Idle
+        Active
+    count = 0
+    function run():
+        if count > 0:
+            count = count - 1
+        elif count < 0:
+            count = 0
+        else:
+            count = 1
+        while count < 10:
+            count = count + 1
+        for i in 5:
+            count = count + 1
+        match count:
+            Idle:
+                return 0
+            Active:
+                return 1

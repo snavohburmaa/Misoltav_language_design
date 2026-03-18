@@ -1157,6 +1157,37 @@ sender   value   now   block   self   chain   gas
 
 ---
 
+## Solidity parity and production use
+
+Misoltav is designed to achieve **full Solidity feature parity** via the **transpile path**: every construct in this spec is parseable and transpiles to valid Solidity, so you can compile with **solc** or **Foundry** and deploy to mainnet.
+
+| Area | Status |
+|------|--------|
+| **Control flow** | `if` / `elif` / `else`, `match`, `for`, `while` → emitted as Solidity equivalents |
+| **Types** | Structs, enums, mappings with `address` or `number`/`uint` keys, array-like `name[]` |
+| **Contracts** | Inheritance (`contract A is B, C`), `abstract contract`, `constructor`, `receive()`, `fallback()` |
+| **Interfaces** | Top-level `interface Name:` with function signatures |
+| **Errors** | `error Name(args);` and `revert Name(...)` |
+| **Imports** | `import X` / `import X from "path"` (emitted as Solidity `import` or inlined for single-file) |
+
+**How to use in production**
+
+1. Write `.miso` contracts; use `misolc check <file.miso>` to verify parse and basic checks.
+2. Transpile: `misolc transpile <file.miso> -o out.sol`.
+3. Compile with Foundry/Hardhat: `forge build` or `npx hardhat compile`.
+4. Deploy and test as usual. Native `misolc compile` produces EVM bytecode + ABI for simpler contracts; for full feature set, use the transpile path.
+
+---
+
+## Safety (only / lock / payable and overflow)
+
+- **only &lt;id&gt;** enforces access control: the function body runs only if `sender == id`. Emitted as a modifier (e.g. `onlyOwner`).
+- **lock** prevents reentrancy: a single reentrancy guard is emitted and applied to the function.
+- **payable** allows the function to receive ether; emitted as Solidity `payable`.
+- **Overflow**: Transpiled Solidity uses **Solidity 0.8+**, which has built-in overflow checks. Native compile assumes the same semantics where applicable.
+
+---
+
 *Misoltav Language Specification v2.0*
 *Authored: 2026*
 *License: Apache 2.0*

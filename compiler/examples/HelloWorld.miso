@@ -1,0 +1,9 @@
+contract HelloWorld
+    greeting = "Hello, Misoltav!"
+
+    function getGreeting():
+        return greeting
+
+    function setGreeting(newGreeting):
+        only sender
+        greeting = newGreeting

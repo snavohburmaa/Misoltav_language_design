@@ -1,0 +1,15 @@
+contract SimpleGet
+    function get():
+        return 42
+
+test "get returns 42" {
+    expect get() == 42
+}
+
+test "get is not zero" {
+    expect get() != 0
+}
+
+test "set returns wrong value" {
+    expect get() == 0
+}

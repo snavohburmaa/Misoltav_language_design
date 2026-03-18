@@ -1,0 +1,47 @@
+{
+  "name": "misoltav-language",
+  "displayName": "Misoltav",
+  "description": "Syntax highlighting, diagnostics, completions, and go-to-definition for .miso files",
+  "version": "0.1.0",
+  "publisher": "misoltav",
+  "engines": { "vscode": "^1.74.0" },
+  "categories": ["Programming Languages", "Linters"],
+  "activationEvents": ["onLanguage:misoltav"],
+  "main": "./extension.js",
+  "contributes": {
+    "languages": [
+      {
+        "id": "misoltav",
+        "aliases": ["Misoltav", "miso"],
+        "extensions": [".miso"],
+        "configuration": "./language-configuration.json"
+      }
+    ],
+    "grammars": [
+      {
+        "language": "misoltav",
+        "scopeName": "source.miso",
+        "path": "./syntaxes/misoltav.tmLanguage.json"
+      }
+    ],
+    "configuration": {
+      "title": "Misoltav",
+      "properties": {
+        "misoltav.runCheckOnSave": {
+          "type": "boolean",
+          "default": true,
+          "description": "Run misolc check when saving a .miso file (requires misolc on PATH)"
+        },
+        "misoltav.misolcPath": {
+          "type": "string",
+          "default": "node",
+          "description": "Path to node (or full path to misolc runner)"
+        }
+      }
+    }
+  },
+  "dependencies": {
+    "vscode-languageclient": "^9.0.1"
+  },
+  "devDependencies": {}
+}

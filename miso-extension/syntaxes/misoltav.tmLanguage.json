@@ -1,0 +1,60 @@
+{
+  "$schema": "https://raw.githubusercontent.com/martinring/tmlanguage/master/tmlanguage.json",
+  "name": "Misoltav",
+  "scopeName": "source.miso",
+  "patterns": [
+    { "include": "#comments" },
+    { "include": "#keywords" },
+    { "include": "#strings" },
+    { "include": "#addresses" },
+    { "include": "#numbers" },
+    { "include": "#operators" },
+    { "include": "#identifiers" }
+  ],
+  "repository": {
+    "comments": {
+      "patterns": [{
+        "name": "comment.line.miso",
+        "match": "--.*$"
+      }]
+    },
+    "keywords": {
+      "patterns": [{
+        "name": "keyword.control.miso",
+        "match": "\\b(if|elif|else|match|for|in|while|and|or|not)\\b"
+      }, {
+        "name": "keyword.declaration.miso",
+        "match": "\\b(contract|interface|function|event|struct|enum|error|import|from)\\b"
+      }, {
+        "name": "keyword.other.miso",
+        "match": "\\b(only|lock|payable|override|abstract|receive|fallback|virtual|require|emit|return|revert|send|true|false|self|is)\\b"
+      }]
+    },
+    "strings": {
+      "name": "string.quoted.double.miso",
+      "begin": "\"",
+      "end": "\"",
+      "patterns": [{ "name": "constant.character.escape.miso", "match": "\\\\." }]
+    },
+    "addresses": {
+      "name": "constant.other.address.miso",
+      "match": "0x[0-9a-fA-F]{40}"
+    },
+    "numbers": {
+      "patterns": [{
+        "name": "constant.numeric.miso",
+        "match": "\\b[0-9][0-9_]*(\\s+(ether|wei|gwei|seconds|minutes|hours|days))?\\b"
+      }]
+    },
+    "operators": {
+      "name": "keyword.operator.miso",
+      "match": "([+\\-*/%=<>!]=?|\\band\\b|\\bor\\b)"
+    },
+    "identifiers": {
+      "patterns": [{
+        "name": "variable.parameter.miso",
+        "match": "\\b(sender|value|now|block)\\b"
+      }]
+    }
+  }
+}

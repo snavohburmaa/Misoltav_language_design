@@ -1,0 +1,52 @@
+{
+  "name": "misolc",
+  "version": "1.0.0",
+  "description": "Misoltav compiler — build EVM bytecode + ABI, run tests, transpile to Solidity",
+  "type": "module",
+  "main": "compile.js",
+  "bin": {
+    "misolc": "cli.js"
+  },
+  "scripts": {
+    "build": "node cli.js build",
+    "test": "node cli.js test examples/SimpleGet.miso",
+    "test:all": "node cli.js test examples/SimpleGet.miso"
+  },
+  "engines": {
+    "node": ">=18"
+  },
+  "keywords": [
+    "misoltav",
+    "misolc",
+    "solidity",
+    "transpiler",
+    "compiler",
+    "smart-contracts",
+    "evm",
+    "ethereum"
+  ],
+  "license": "Apache-2.0",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/misoltav/misoltav.git"
+  },
+  "bugs": {
+    "url": "https://github.com/misoltav/misoltav/issues"
+  },
+  "homepage": "https://github.com/misoltav/misoltav#readme",
+  "files": [
+    "cli.js",
+    "compile.js",
+    "parser.js",
+    "lexer.js",
+    "emit-evm.js",
+    "emit-solidity.js",
+    "run-vm.js",
+    "run-tests.js",
+    "examples"
+  ],
+  "dependencies": {
+    "@ethereumjs/evm": "^10.1.1",
+    "ethereum-cryptography": "^3.0.0"
+  }
+}
